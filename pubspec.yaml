@@ -1,0 +1,39 @@
+name: skillseeds
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Pacote para persistência de dados simples
+  shared_preferences: ^2.2.2
+  
+  # Gerenciamento de estado e injeção de dependência
+  flutter_riverpod: ^2.4.9
+  
+  # Renderizador de Markdown para as políticas
+  flutter_markdown: ^0.6.18
+
+  # Pacote para usar fontes do Google
+  google_fonts: ^6.1.0 # <-- ADICIONADO
+
+  # Ícones padrão
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Declaração dos assets (imagens e políticas)
+  assets:
+    - assets/images/app_icon.png
+    - assets/policies/
