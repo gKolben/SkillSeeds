@@ -70,21 +70,21 @@
 > **A**cionável (em 1 dia): que caiba em **uma iteração curta**.
 
 - **Útil porque…** _(valor para usuário/negócio/UX)_  
-  → ______________________________________________________________________
+  → Útil pois o usuário teria mais liberdade e pode explorar por conta própria.
 
 - **Melhoraria se…** _(ação concreta em 1 dia; indique onde e como)_  
-  → ______________________________________________________________________
+  → Adicionasse um botão de pular no Onboarding para ir até os consentimentos.
 
 **Onde verificar (evidência esperada):**  
-- Arquivo/rota/widget: _________________________________________________  
-- Commit/PR esperado: _________________________________________________  
-- Critério de aceite (como saberei que ficou pronto?): ___________________
+- Arquivo/rota/widget: Botão de pular 
+- Commit/PR esperado: Adicionado botão de pular no Onboarding 
+- Critério de aceite (como saberei que ficou pronto?): Botão de pular adicionado, vísivel e funcional.
 
 ---
 
 ## Post-its para o Gallery Walk
-- **Verde — “Útil porque…”** ____________________________________________  
-- **Amarelo — “Melhoraria se (1 dia)…”** _________________________________
+- **Verde — “Útil porque…”** Da controle para o usuário 
+- **Amarelo — “Melhoraria se (1 dia)…”** Adicinasse o botão Pular no Onboarding
 
 > Dica: mantenha as frases **curtas e claras**; objetivo é facilitar a ação imediata.
 
