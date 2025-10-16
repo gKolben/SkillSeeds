@@ -1,16 +1,82 @@
-# prd
+# SkillSeeds 🌱
 
-A new Flutter project.
+SkillSeeds é um aplicativo Flutter dedicado ao aprendizado contínuo através de micro-exercícios diários. O app ajuda usuários a desenvolverem novas habilidades em apenas 5 minutos por dia.
 
-## Getting Started
+## 📱 Funcionalidades
 
-This project is a starting point for a Flutter application.
+- **Trilhas de Aprendizado Personalizadas**
+  - Design: Atalhos e conceitos de UI/UX
+  - Desenvolvimento: Atalhos do VS Code, Git e terminal
 
-A few resources to get you started if this is your first Flutter project:
+- **Experiência do Usuário**
+  - Onboarding intuitivo
+  - Políticas de privacidade e termos de uso integrados
+  - Sistema de consentimento do usuário
+  - Interface moderna e responsiva
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🛠️ Tecnologias Utilizadas
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Flutter
+- Riverpod para gerenciamento de estado
+- Shared Preferences para persistência local
+- Flutter Markdown para renderização de conteúdo
+- Material Design
+
+## 🚀 Começando
+
+### Pré-requisitos
+
+- Flutter (última versão estável)
+- Dart SDK
+- Android Studio / XCode (para desenvolvimento mobile)
+- VS Code (recomendado)
+
+### Instalação
+
+1. Clone o repositório
+```bash
+git clone https://github.com/gKolben/SkillSeeds.git
+```
+
+2. Instale as dependências
+```bash
+flutter pub get
+```
+
+3. Execute o aplicativo
+```bash
+flutter run
+```
+
+## 📱 Plataformas Suportadas
+
+- Android
+- iOS
+- Web
+- Windows
+- macOS
+- Linux
+
+## 🏗️ Estrutura do Projeto
+
+```
+lib/
+├── config/           # Configurações do app (rotas, temas)
+├── providers/        # Providers Riverpod
+├── screens/         # Telas do aplicativo
+├── services/        # Serviços (preferências, etc)
+├── widgets/         # Widgets reutilizáveis
+└── main.dart        # Ponto de entrada do aplicativo
+```
+
+## 📄 Licença
+
+Este projeto está sob a licença [Inserir Tipo de Licença]. Veja o arquivo LICENSE para mais detalhes.
+
+## 👥 Contribuições
+
+Contribuições são bem-vindas! Por favor, leia as guidelines de contribuição antes de submeter pull requests.
+
+---
+
+Desenvolvido com 💚 pela equipe SkillSeeds
