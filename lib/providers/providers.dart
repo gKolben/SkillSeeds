@@ -9,10 +9,16 @@ final sharedPreferencesProvider =
 
 final prefsServiceProvider = Provider<PrefsService>((ref) {
   final sharedPrefs = ref.watch(sharedPreferencesProvider).asData?.value;
-
   if (sharedPrefs == null) {
     throw Exception("SharedPreferences not initialized");
   }
-
   return PrefsService(sharedPrefs);
+});
+
+final userNameProvider = StateProvider<String>((ref) {
+  return ref.watch(prefsServiceProvider).getUserName();
+});
+
+final userEmailProvider = StateProvider<String>((ref) {
+  return ref.watch(prefsServiceProvider).getUserEmail();
 });

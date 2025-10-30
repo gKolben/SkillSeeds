@@ -6,6 +6,7 @@ import 'package:skillseeds/screens/home_screen.dart';
 import 'package:skillseeds/screens/onboarding_screen.dart';
 import 'package:skillseeds/screens/policy_screen.dart';
 import 'package:skillseeds/screens/splash_screen.dart';
+import 'package:skillseeds/screens/profile_screen.dart';
 
 void main() async {
 
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.onboarding: (context) => const OnboardingScreen(),
         AppRoutes.policy: (context) => const PolicyScreen(),
         AppRoutes.home: (context) => const HomeScreen(),
+        AppRoutes.profile: (context) => const ProfileScreen(),
       },
     );
   }
