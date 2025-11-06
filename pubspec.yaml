@@ -10,30 +10,28 @@ dependencies:
   flutter:
     sdk: flutter
   
-  # Pacote para persistência de dados simples
+  # Pacotes de produção...
   shared_preferences: ^2.2.2
-  
-  # Gerenciamento de estado e injeção de dependência
   flutter_riverpod: ^2.4.9
-  
-  # Renderizador de Markdown para as políticas
   flutter_markdown: ^0.6.18
-
-  # Pacote para usar fontes do Google
-  google_fonts: ^6.1.0 # <-- ADICIONADO
-
-  # Ícones padrão
+  google_fonts: ^6.1.0
   cupertino_icons: ^1.0.2
+
+  # --- ADICIONADOS PARA O SUPABASE ---
+  supabase_flutter: ^2.5.0 # Pacote oficial do Supabase
+  flutter_dotenv: ^5.1.0   # Para carregar as chaves do .env
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  mocktail: ^1.0.3
 
 flutter:
   uses-material-design: true
 
-  # Declaração dos assets (imagens e políticas)
+  # Assets...
   assets:
     - assets/images/app_icon.png
     - assets/policies/
+    - .env # <-- ADICIONADO: Registra o .env como um asset
