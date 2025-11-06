@@ -13,16 +13,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // --- CARREGAR O .env ---
-  // (Conforme o guia, o .env deve estar na raiz do projeto e listado no pubspec.yaml)
   await dotenv.load(fileName: ".env");
 
   final supabaseUrl = dotenv.env['SUPABASE_URL'];
   final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'];
 
-  // --- VALIDAR E INICIALIZAR O SUPABASE ---
   if (supabaseUrl == null || supabaseAnonKey == null) {
-    // Lança um erro claro se as chaves não estiverem no .env
     throw Exception('Faltam SUPABASE_URL ou SUPABASE_ANON_KEY no arquivo .env');
   }
 
@@ -30,7 +26,6 @@ void main() async {
     url: supabaseUrl,
     anonKey: supabaseAnonKey,
   );
-  // --- FIM DA CONFIGURAÇÃO DO SUPABASE ---
 
   runApp(
     const ProviderScope(
