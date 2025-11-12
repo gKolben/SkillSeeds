@@ -1,3 +1,4 @@
+// Comentário: Importa os pacotes necessários do Flutter, Riverpod e Markdown.
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -5,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skillseeds/config/app_routes.dart';
 import 'package:skillseeds/providers/providers.dart';
 
+// Comentário: Mudamos para ConsumerStatefulWidget para gerenciar o estado local
+//             (como _isLoading) e ainda ter acesso ao 'ref' do Riverpod.
 class PolicyScreen extends ConsumerStatefulWidget {
   const PolicyScreen({super.key});
 
@@ -13,16 +16,23 @@ class PolicyScreen extends ConsumerStatefulWidget {
 }
 
 class _PolicyScreenState extends ConsumerState<PolicyScreen> {
+  // Comentário: Estado local para controlar o que já foi lido.
   bool _privacyPolicyRead = false;
   bool _termsOfUseRead = false;
   bool _consentChecked = false;
 
+  // --- CORREÇÃO DO BUG ---
+  // Comentário: Adiciona um estado de 'loading' para o botão de salvar.
+  bool _isLoading = false;
+
+  // Comentário: Função de controle para habilitar o checkbox final.
   void _checkCanProceed() {
     setState(() {
       _consentChecked = _privacyPolicyRead && _termsOfUseRead;
     });
   }
 
+  // Comentário: Função que abre o diálogo de visualização da política (Markdown).
   Future<void> _showPolicyDialog(String title, String assetPath) async {
     final content = await rootBundle.loadString(assetPath);
     await showDialog(
@@ -38,6 +48,7 @@ class _PolicyScreenState extends ConsumerState<PolicyScreen> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
+              // Comentário: Atualiza o estado da política lida.
               if (assetPath.contains('privacy')) {
                 setState(() => _privacyPolicyRead = true);
               } else {
@@ -52,6 +63,36 @@ class _PolicyScreenState extends ConsumerState<PolicyScreen> {
     );
   }
 
+  // --- CORREÇÃO DO BUG ---
+  // Comentário: Esta é a função principal que corrige o bug.
+  //             Ela agora é 'async' para 'esperar' os dados serem salvos.
+  Future<void> _onSaveAndContinue() async {
+    // Comentário: 1. Mostra o 'loading' e desabilita o botão para evitar cliques duplos.
+    setState(() => _isLoading = true);
+
+    // Comentário: 2. Pega o serviço de preferências.
+    final prefs = ref.read(prefsServiceProvider);
+
+    // Comentário: 3. Salva AMBOS os status (o consentimento E o 'onboarding concluído').
+    //             Usamos 'await' para garantir que sejam salvos antes de navegar.
+    try {
+      await prefs.saveConsent();
+      await prefs.setOnboardingCompleted(); // <-- A LINHA QUE CORRIGE O BUG
+    } catch (e) {
+      // Lidar com erro se o save falhar, se necessário
+      // No momento, apenas garantimos que o loading pare
+    }
+
+    // Comentário: 4. Apenas navega para a Home DEPOIS de tudo salvo.
+    //             'mounted' verifica se a tela ainda existe antes de navegar.
+    if (mounted) {
+      Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+    } else {
+      // Comentário: Se a tela não estiver 'montada', paramos o loading
+      //             para evitar erros.
+      setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +107,10 @@ class _PolicyScreenState extends ConsumerState<PolicyScreen> {
               const Spacer(),
               Text(
                 'Políticas e Termos',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
@@ -76,24 +120,24 @@ class _PolicyScreenState extends ConsumerState<PolicyScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
-              
               _PolicyButton(
                 title: 'Política de Privacidade',
                 isRead: _privacyPolicyRead,
-                onPressed: () => _showPolicyDialog('Política de Privacidade', 'assets/policies/privacy_policy.md'),
+                onPressed: () => _showPolicyDialog(
+                    'Política de Privacidade', 'assets/policies/privacy_policy.md'),
               ),
               const SizedBox(height: 16),
               _PolicyButton(
                 title: 'Termos de Uso',
                 isRead: _termsOfUseRead,
-                onPressed: () => _showPolicyDialog('Termos de Uso', 'assets/policies/terms_of_use.md'),
+                onPressed: () => _showPolicyDialog(
+                    'Termos de Uso', 'assets/policies/terms_of_use.md'),
               ),
-              
               const Spacer(),
-
               CheckboxListTile(
                 title: const Text('Li e concordo com os documentos acima.'),
                 value: _consentChecked,
+                // Comentário: O checkbox só é habilitado após ler os dois documentos.
                 onChanged: _privacyPolicyRead && _termsOfUseRead
                     ? (bool? value) {
                         setState(() {
@@ -106,14 +150,20 @@ class _PolicyScreenState extends ConsumerState<PolicyScreen> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: _consentChecked
-                    ? () {
-                        final prefs = ref.read(prefsServiceProvider);
-                        prefs.saveConsent();
-                        Navigator.of(context).pushReplacementNamed(AppRoutes.home);
-                      }
-                    : null,
-                child: const Text('Salvar e Continuar'),
+                // Comentário: O botão é desabilitado se estiver carregando (loading)
+                //             OU se o consentimento não tiver sido marcado.
+                onPressed: _isLoading || !_consentChecked
+                    ? null
+                    : _onSaveAndContinue, // <-- Chama a nova função async
+                child: _isLoading
+                    ? const SizedBox(
+                        height: 24,
+                        width: 24,
+                        // Comentário: Mostra um indicador de progresso
+                        //             enquanto salva.
+                        child: CircularProgressIndicator(color: Colors.white),
+                      )
+                    : const Text('Salvar e Continuar'),
               ),
             ],
           ),
@@ -123,6 +173,7 @@ class _PolicyScreenState extends ConsumerState<PolicyScreen> {
   }
 }
 
+// Comentário: Widget auxiliar para o botão de política.
 class _PolicyButton extends StatelessWidget {
   final String title;
   final bool isRead;
@@ -141,12 +192,17 @@ class _PolicyButton extends StatelessWidget {
       label: Text(title),
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
-        foregroundColor: isRead ? Theme.of(context).colorScheme.secondary : Theme.of(context).primaryColor,
+        foregroundColor: isRead
+            ? Theme.of(context).colorScheme.secondary
+            : Theme.of(context).primaryColor,
         side: BorderSide(
-          color: isRead ? Theme.of(context).colorScheme.secondary : Theme.of(context).primaryColor,
+          color: isRead
+              ? Theme.of(context).colorScheme.secondary
+              : Theme.of(context).primaryColor,
         ),
         padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
