@@ -1,35 +1,37 @@
 class LessonDTO {
   final int id;
-  final int track_id;
+  final int trackId;
   final String title;
   final String type;
-  final String created_at;
+  final String createdAt;
 
   LessonDTO({
     required this.id,
-    required this.track_id,
+    required this.trackId,
     required this.title,
     required this.type,
-    required this.created_at,
+    required this.createdAt,
   });
 
   factory LessonDTO.fromMap(Map<String, dynamic> map) {
     return LessonDTO(
       id: map['id'] as int,
-      track_id: map['track_id'] as int,
+      // map snake_case JSON fields to camelCase DTO properties
+      trackId: map['track_id'] as int,
       title: map['title'] as String,
       type: map['type'] as String,
-      created_at: map['created_at'] as String,
+      createdAt: map['created_at'] as String,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'track_id': track_id,
+      // convert back to snake_case for Supabase
+      'track_id': trackId,
       'title': title,
       'type': type,
-      'created_at': created_at,
+      'created_at': createdAt,
     };
   }
 }

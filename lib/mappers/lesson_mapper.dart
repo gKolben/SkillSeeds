@@ -5,9 +5,9 @@ class LessonMapper {
   static Lesson toEntity(LessonDTO dto) {
     return Lesson(
       id: dto.id,
-      trackId: dto.track_id,
+      trackId: dto.trackId,
       title: dto.title,
-      createdAt: DateTime.parse(dto.created_at),
+      createdAt: DateTime.parse(dto.createdAt),
       lessonType: _lessonTypeFromString(dto.type),
     );
   }
@@ -15,9 +15,9 @@ class LessonMapper {
   static LessonDTO toDto(Lesson entity) {
     return LessonDTO(
       id: entity.id,
-      track_id: entity.trackId,
+      trackId: entity.trackId,
       title: entity.title,
-      created_at: entity.createdAt.toIso8601String(),
+      createdAt: entity.createdAt.toIso8601String(),
       type: _stringFromLessonType(entity.lessonType),
     );
   }

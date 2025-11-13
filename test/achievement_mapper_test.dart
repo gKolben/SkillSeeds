@@ -16,9 +16,9 @@ void main() {
         id: 1,
         title: 'Primeira Lição',
         description: 'Você completou sua primeira lição!',
-        icon_url: 'https://icon.url/1.png',
+        iconUrl: 'https://icon.url/1.png',
         rarity: 'rare',
-        created_at: testDateString,
+        createdAt: testDateString,
       );
 
       // 2. Act
@@ -53,9 +53,9 @@ void main() {
       expect(dto.id, 2);
       expect(dto.title, 'Trilha de Design');
       expect(dto.description, 'Você completou a trilha de Design.');
-      expect(dto.icon_url, 'https://icon.url/2.png');
+      expect(dto.iconUrl, 'https://icon.url/2.png');
       expect(dto.rarity, 'epic');
-      expect(dto.created_at, testDateString);
+      expect(dto.createdAt, testDateString);
     });
   });
 }

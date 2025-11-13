@@ -34,26 +34,30 @@ class _PrivacyDialogState extends ConsumerState<PrivacyDialog> {
       ref.read(userNameProvider.notifier).state = '';
       ref.read(userEmailProvider.notifier).state = '';
 
-      Navigator.of(context, rootNavigator: true)
-          .pushNamedAndRemoveUntil(
-        AppRoutes.onboarding,
-        (route) => false,
-      );
-
+      // Mostrar a mensagem antes de navegar para evitar tentar usar
+      // o `context` depois que as rotas forem removidas.
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Consentimentos revogados e dados pessoais apagados.'),
           backgroundColor: AppTheme.primaryColor,
         ),
       );
+
+      Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+        AppRoutes.onboarding,
+        (route) => false,
+      );
     } else {
-      Navigator.of(context).pop();
+      // Mostrar a mensagem antes de fechar o diálogo para garantir que
+      // o `ScaffoldMessenger` ainda esteja disponível.
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Preferências de privacidade salvas.'),
           backgroundColor: Colors.green,
         ),
       );
+
+      Navigator.of(context).pop();
     }
   }
 
@@ -95,7 +99,7 @@ class _PrivacyDialogState extends ConsumerState<PrivacyDialog> {
                 });
               },
               contentPadding: EdgeInsets.zero,
-              activeColor: Colors.red,
+              activeThumbColor: Colors.red,
             ),
           ],
         ),

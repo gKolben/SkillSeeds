@@ -3,17 +3,18 @@ class AchievementDTO {
   final int id;
   final String title;
   final String description;
-  final String icon_url; // <-- snake_case
+  // Usamos camelCase nas propriedades Dart e mapeamos para/desde snake_case no JSON
+  final String iconUrl;
   final String rarity; // <-- String, não enum
-  final String created_at; // <-- String ISO 8601
+  final String createdAt; // <-- String ISO 8601
 
   AchievementDTO({
     required this.id,
     required this.title,
     required this.description,
-    required this.icon_url,
+    required this.iconUrl,
     required this.rarity,
-    required this.created_at,
+    required this.createdAt,
   });
 
   // Construtor de fábrica para criar um DTO a partir do JSON do Supabase
@@ -22,9 +23,10 @@ class AchievementDTO {
       id: map['id'] as int,
       title: map['title'] as String,
       description: map['description'] as String,
-      icon_url: map['icon_url'] as String,
+      // Mapeia os campos snake_case vindos do Supabase para camelCase do DTO
+      iconUrl: map['icon_url'] as String,
       rarity: map['rarity'] as String,
-      created_at: map['created_at'] as String,
+      createdAt: map['created_at'] as String,
     );
   }
 
@@ -34,9 +36,10 @@ class AchievementDTO {
       'id': id,
       'title': title,
       'description': description,
-      'icon_url': icon_url,
+      // Converte de volta para o formato esperado pelo Supabase (snake_case)
+      'icon_url': iconUrl,
       'rarity': rarity,
-      'created_at': created_at,
+      'created_at': createdAt,
     };
   }
 }

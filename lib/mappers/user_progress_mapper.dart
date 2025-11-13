@@ -7,10 +7,10 @@ class UserProgressMapper {
   static UserProgress toEntity(UserProgressDTO dto) {
     return UserProgress(
       id: dto.id,
-      userId: dto.user_id,
-      lessonId: dto.lesson_id,
-      completedAt: DateTime.parse(dto.completed_at),
-      updatedAt: DateTime.parse(dto.updated_at),
+      userId: dto.userId,
+      lessonId: dto.lessonId,
+      completedAt: DateTime.parse(dto.completedAt),
+      updatedAt: DateTime.parse(dto.updatedAt),
     );
   }
 
@@ -18,10 +18,10 @@ class UserProgressMapper {
   static UserProgressDTO toDto(UserProgress entity) {
     return UserProgressDTO(
       id: entity.id,
-      user_id: entity.userId,
-      lesson_id: entity.lessonId,
-      completed_at: entity.completedAt.toIso8601String(),
-      updated_at: entity.updatedAt.toIso8601String(),
+      userId: entity.userId,
+      lessonId: entity.lessonId,
+      completedAt: entity.completedAt.toIso8601String(),
+      updatedAt: entity.updatedAt.toIso8601String(),
     );
   }
 }

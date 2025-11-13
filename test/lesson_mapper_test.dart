@@ -8,10 +8,10 @@ void main() {
     test('deve converter corretamente LessonDTO para Lesson (Entity)', () {
       final dto = LessonDTO(
         id: 1,
-        track_id: 10,
+        trackId: 10,
         title: 'O que é um DTO?',
         type: 'quiz',
-        created_at: '2025-01-01T12:00:00.000Z',
+        createdAt: '2025-01-01T12:00:00.000Z',
       );
 
       final entity = LessonMapper.toEntity(dto);
@@ -35,11 +35,11 @@ void main() {
 
       final dto = LessonMapper.toDto(entity);
 
-      expect(dto.id, 2);
-      expect(dto.track_id, 20);
-      expect(dto.title, 'O que é um Mapper?');
-      expect(dto.type, 'video');
-      expect(dto.created_at,
+        expect(dto.id, 2);
+        expect(dto.trackId, 20);
+        expect(dto.title, 'O que é um Mapper?');
+        expect(dto.type, 'video');
+        expect(dto.createdAt,
           '2025-02-02T10:00:00.000Z');
     });
   });

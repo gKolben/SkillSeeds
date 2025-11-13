@@ -35,9 +35,10 @@ class _PolicyScreenState extends ConsumerState<PolicyScreen> {
   // Comentário: Função que abre o diálogo de visualização da política (Markdown).
   Future<void> _showPolicyDialog(String title, String assetPath) async {
     final content = await rootBundle.loadString(assetPath);
+    if (!mounted) return;
     await showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: Text(title),
         content: Scrollbar(
           child: SingleChildScrollView(
@@ -47,7 +48,7 @@ class _PolicyScreenState extends ConsumerState<PolicyScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(dialogContext).pop();
               // Comentário: Atualiza o estado da política lida.
               if (assetPath.contains('privacy')) {
                 setState(() => _privacyPolicyRead = true);

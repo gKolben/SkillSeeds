@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:skillseeds/config/app_theme.dart';
 import 'package:skillseeds/providers/providers.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {

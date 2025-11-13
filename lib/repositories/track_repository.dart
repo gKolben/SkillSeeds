@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:skillseeds/models/track_mapper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/track_dto.dart';
@@ -23,8 +24,8 @@ class TrackRepository {
 
       return trackList;
 
-    } catch (e) {
-      print('Erro ao buscar trilhas: $e');
+    } catch (e, st) {
+      developer.log('Erro ao buscar trilhas', error: e, stackTrace: st);
       return [];
     }
   }

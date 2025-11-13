@@ -1,24 +1,18 @@
 // Comentário: Centraliza todas as chaves (strings) usadas no SharedPreferences
 //             para evitar erros de digitação.
 class PrefsKeys {
-  // Chaves de Consentimento Principal (LGPD)
+  // Comentário: Chaves de Consentimento (LGPD)
   static const String policyVersionAccepted = 'policies_version_accepted';
   static const String acceptedAt = 'accepted_at';
 
-  // --- CORREÇÃO DO BUG ---
-  // Comentário: Adiciona a chave para sabermos se o usuário completou
-  //             o fluxo de onboarding/políticas pela primeira vez.
+  // --- CORREÇÃO DO BUG: Chave de Onboarding ---
+  // Comentário: Adiciona a chave para o status do onboarding.
   static const String onboardingCompleted = 'onboarding_completed';
-  // --- FIM DA CORREÇÃO ---
 
-  // Chaves do Perfil do Usuário
+  // Comentário: Chaves do Perfil do Utilizador
   static const String userName = 'user_name';
   static const String userEmail = 'user_email';
 
-  // Chave de Consentimento Granular
+  // Comentário: Chave do Consentimento de Marketing
   static const String marketingConsent = 'marketing_consent';
-
-  // Chave do Cache de Trilhas
-  // (Ainda não estamos usando, mas está aqui)
-  static const String tracksCache = 'tracks_cache';
 }

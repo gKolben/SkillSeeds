@@ -14,10 +14,10 @@ void main() {
       // 1. Arrange
       final dto = UserProgressDTO(
         id: 1,
-        user_id: 'user-uuid-123',
-        lesson_id: 10,
-        completed_at: testDateString,
-        updated_at: testDateString,
+        userId: 'user-uuid-123',
+        lessonId: 10,
+        completedAt: testDateString,
+        updatedAt: testDateString,
       );
 
       // 2. Act
@@ -48,10 +48,10 @@ void main() {
 
       // 3. Assert
       expect(dto.id, 2);
-      expect(dto.user_id, 'user-uuid-456');
-      expect(dto.lesson_id, 20);
-      expect(dto.completed_at, testDateString);
-      expect(dto.updated_at, testDateString);
+      expect(dto.userId, 'user-uuid-456');
+      expect(dto.lessonId, 20);
+      expect(dto.completedAt, testDateString);
+      expect(dto.updatedAt, testDateString);
     });
   });
 }

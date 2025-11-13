@@ -1,4 +1,5 @@
 // Comentário: Importa o Supabase e os modelos/mappers que criamos
+import 'dart:developer' as developer;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/achievement.dart';
 import '../models/achievement_dto.dart';
@@ -28,9 +29,9 @@ class AchievementRepository {
           dtoList.map((dto) => AchievementMapper.toEntity(dto)).toList();
 
       return achievementList;
-    } catch (e) {
-      // Comentário: Em caso de erro, imprime no console e retorna uma lista vazia.
-      print('Erro ao buscar conquistas: $e');
+    } catch (e, st) {
+      // Comentário: Em caso de erro, registra em log com stacktrace e propaga.
+      developer.log('Erro ao buscar conquistas', error: e, stackTrace: st);
       rethrow; // Propaga o erro para a UI tratar
     }
   }

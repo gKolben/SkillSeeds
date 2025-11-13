@@ -9,8 +9,8 @@ class AchievementMapper {
       id: dto.id,
       title: dto.title,
       description: dto.description,
-      iconUrl: dto.icon_url,
-      createdAt: DateTime.parse(dto.created_at),
+      iconUrl: dto.iconUrl,
+      createdAt: DateTime.parse(dto.createdAt),
       // Converte a String 'rarity' para o nosso enum 'AchievementRarity'
       rarity: _rarityFromString(dto.rarity),
     );
@@ -22,10 +22,10 @@ class AchievementMapper {
       id: entity.id,
       title: entity.title,
       description: entity.description,
-      icon_url: entity.iconUrl,
-      created_at: entity.createdAt.toIso8601String(),
-      // Converte o enum 'AchievementRarity' de volta para String
+      iconUrl: entity.iconUrl,
       rarity: _stringFromRarity(entity.rarity),
+      createdAt: entity.createdAt.toIso8601String(),
+      // Converte o enum 'AchievementRarity' de volta para String
     );
   }
 

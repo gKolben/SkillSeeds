@@ -1,4 +1,5 @@
 // Comentário: Importa o Supabase e os modelos/mappers que criamos
+import 'dart:developer' as developer;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/lesson.dart';
 import '../models/lesson_dto.dart';
@@ -29,9 +30,9 @@ class LessonRepository {
           dtoList.map((dto) => LessonMapper.toEntity(dto)).toList();
 
       return lessonList;
-    } catch (e) {
-      // Comentário: Em caso de erro, imprime no console e retorna uma lista vazia.
-      print('Erro ao buscar lições: $e');
+    } catch (e, st) {
+      // Comentário: Em caso de erro, registra em log com stacktrace e propaga.
+      developer.log('Erro ao buscar lições', error: e, stackTrace: st);
       rethrow; // Propaga o erro para a UI tratar (ex: mostrar mensagem de erro)
     }
   }
