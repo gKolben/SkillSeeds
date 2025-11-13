@@ -1,6 +1,6 @@
 {
-    "name": "prd",
-    "short_name": "prd",
+    "name": "SkillSeeds",
+    "short_name": "SkillSeeds",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
