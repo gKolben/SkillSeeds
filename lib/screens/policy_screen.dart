@@ -78,19 +78,27 @@ class _PolicyScreenState extends ConsumerState<PolicyScreen> {
     try {
       await prefs.saveConsent();
       await prefs.setOnboardingCompleted(); // <-- A LINHA QUE CORRIGE O BUG
-    } catch (e) {
-      // Lidar com erro se o save falhar, se necessário
-      // No momento, apenas garantimos que o loading pare
-    }
 
-    // Comentário: 4. Apenas navega para a Home DEPOIS de tudo salvo.
-    //             'mounted' verifica se a tela ainda existe antes de navegar.
-    if (mounted) {
-      Navigator.of(context).pushReplacementNamed(AppRoutes.home);
-    } else {
-      // Comentário: Se a tela não estiver 'montada', paramos o loading
-      //             para evitar erros.
-      setState(() => _isLoading = false);
+      // Se salvou com sucesso, paramos o loading e navegamos.
+      if (mounted) {
+        setState(() => _isLoading = false);
+        Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+      }
+    } catch (e, st) {
+      // Se houve erro ao salvar (ex.: plugin inacessível no web),
+      // mostramos uma mensagem e reabilitamos o botão.
+      if (mounted) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erro ao salvar consentimento: ${e.toString()}'),
+          ),
+        );
+      }
+      // Opcional: log do stacktrace para facilitar debug durante desenvolvimento
+      // ignore: avoid_print
+      print('Failed to save consent: $e\n$st');
+      return;
     }
   }
 

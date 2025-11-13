@@ -35,12 +35,27 @@ void main() async {
   await dotenv.load(fileName: ".env");
 
   // Comentário: Lê as chaves do .env para uma variável.
-  final supabaseUrl = dotenv.env['SUPABASE_URL'];
-  final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'];
+  // Lê as variáveis cruas do .env (pode conter <> se o usuário copiou/colou)
+  final rawSupabaseUrl = dotenv.env['SUPABASE_URL'] ?? '';
+  final rawSupabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
 
-  // Comentário: Validação de segurança. Se o .env não for encontrado ou estiver
-  //             vazio, o app quebra aqui (intencionalmente) com uma exceção clara.
-  if (supabaseUrl == null || supabaseAnonKey == null) {
+    // Sanitiza valores removendo: sinais <>, aspas e espaços acidentais.
+    // Usamos chamadas simples para evitar erros de escape em regex.
+    final supabaseUrl = rawSupabaseUrl
+      .replaceAll('<', '')
+      .replaceAll('>', '')
+      .replaceAll('"', '')
+      .replaceAll('\'', '')
+      .trim();
+    final supabaseAnonKey = rawSupabaseAnonKey
+      .replaceAll('<', '')
+      .replaceAll('>', '')
+      .replaceAll('"', '')
+      .replaceAll('\'', '')
+      .trim();
+
+  // Validação de segurança: garante que os valores existam após sanitização.
+  if (supabaseUrl.isEmpty || supabaseAnonKey.isEmpty) {
     throw Exception('Faltam SUPABASE_URL ou SUPABASE_ANON_KEY no arquivo .env');
   }
 
