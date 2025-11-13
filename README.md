@@ -50,88 +50,95 @@ cd SkillSeeds
 
 Instale as dependências:
 
-```bash
+**SkillSeeds** 🌱
+
+SkillSeeds é um aplicativo Flutter focado em micro-aprendizado — curtas atividades diárias para aprender ou reforçar habilidades. O projeto usa Supabase como backend para conteúdo dinâmico e Riverpod para gerenciamento de estado.
+
+**Resumo das atualizações recentes**
+- Sanitização automática das variáveis `SUPABASE_URL` e `SUPABASE_ANON_KEY` em `lib/main.dart` (remove `<`/`>` e espaços) para evitar URLs inválidas.
+- Correção no fluxo de consentimento em `lib/screens/policy_screen.dart` para evitar bloqueio ao salvar consentimento (tratamento de erro e loading).
+- Ajustes nos testes: `test/profile_screen_test.dart` corrigido e passando localmente.
+
+**Funcionalidades principais**
+- Onboarding e fluxo de consentimento (políticas e termos).
+- Perfil do usuário com persistência local (nome/e-mail).
+- Conteúdo carregado via Supabase: trilhas, lições e conquistas.
+- Tela de conquistas (achievements) e lista de lições.
+
+**Tecnologias**
+- Flutter
+- Riverpod (state management)
+- Supabase (backend)
+- Shared Preferences (persistência local)
+- Flutter Markdown (renderização de políticas)
+
+## Começando (desenvolvimento)
+
+### Pré-requisitos
+- Flutter SDK (versão estável compatível)
+- Dart
+- VS Code ou Android Studio
+- (Opcional, para build Windows) Visual Studio com workload **Desktop development with C++**
+
+### Configurar variáveis de ambiente
+Crie um arquivo `.env` na raiz (não comitar chaves privadas). Exemplo:
+```text
+SUPABASE_URL=https://rzkkuvydpwyhhmndyblp.supabase.co
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiI... (sua chave anon)
+```
+- Nota: se você copiar a URL/chave do dashboard, não inclua os sinais `<` ou `>` — o app agora os remove automaticamente, mas é melhor manter o arquivo limpo.
+
+### Instalar dependências
+```powershell
 flutter pub get
 ```
 
----
-
-### 2. Configuração do Backend (Supabase)
-
-Este projeto precisa de um backend Supabase para buscar as trilhas de aprendizado.
-
-**Crie seu projeto:** Vá ao Supabase e crie um novo projeto.
-
-**Crie as tabelas:** No *SQL Editor* do seu projeto Supabase, execute o script abaixo para criar e popular a tabela `tracks`:
-
-```sql
--- 1. Cria a tabela para nossas "Trilhas"
-create table if not exists public.tracks (
-  id bigserial primary key,
-  name text not null,
-  description text not null,
-  color_hex varchar(9) null, -- Para a cor do card
-  created_at timestamptz not null default now()
-);
-
--- 2. Insere as duas trilhas que já temos no app
-insert into public.tracks (name, description, color_hex)
-values
-  ('Design', 'Atalhos de ferramentas e conceitos de UI/UX.', '#7C3AED'),
-  ('Desenvolvimento', 'Domine atalhos do VS Code, Git e terminal.', '#10B981');
+### Executar o app (web)
+```powershell
+flutter run -d web-server --web-port=8080
+# depois abra http://localhost:8080 no navegador (Edge/Chrome)
 ```
 
-**Habilite o Acesso (RLS):** Execute este segundo script para permitir que o app leia a tabela:
-
-```sql
--- Habilita o RLS (Segurança em Nível de Linha)
-alter table public.tracks enable row level security;
-
--- Cria a política que permite que QUALQUER UM (anon) leia a tabela "tracks"
-create policy "public read tracks"
-on public.tracks
-for select
-to anon
-using (true);
+### Executar o app (mobile)
+```powershell
+flutter run -d chrome         # web via chrome
+flutter run -d emulator-5554 # Android (exemplo)
 ```
 
----
-
-### 3. Configuração das Chaves de API (Obrigatório)
-
-O aplicativo usa um arquivo `.env` para se conectar ao Supabase com segurança.
-
-**Encontre suas chaves:** No Dashboard do Supabase, vá em *Project Settings (Engrenagem)* → *API*.  
-**Crie o arquivo `.env`:** Na raiz do seu projeto Flutter (mesma pasta do `pubspec.yaml`), crie um arquivo chamado `.env`.  
-**Copie o molde:** Copie o conteúdo de `.env.example` e cole no seu `.env`.  
-**Preencha as chaves:** Cole sua URL e sua chave anon public do Supabase no arquivo `.env`.
-
-```env
-SUPABASE_URL=https://<seu-projeto-id>.supabase.co
-SUPABASE_ANON_KEY=<sua-chave-anon-aqui>
+### Rodar testes
+```powershell
+flutter test                 # roda todos os testes
+flutter test test/profile_screen_test.dart  # roda apenas o teste do perfil
 ```
 
----
+## Como o Supabase deve ser configurado
+- Configure um projeto no Supabase e crie as tabelas necessárias (`tracks`, `lessons`, `achievements`), conforme esperado pelas repositories em `lib/repositories/`.
+- Obtenha `SUPABASE_URL` e `SUPABASE_ANON_KEY` no Dashboard → Project Settings → API.
 
-### 4. Execute o Aplicativo
-
-Com o `.env` preenchido e as dependências instaladas, rode o app (recomenda-se o Chrome para testes rápidos):
-
-```bash
-flutter run -d chrome
-```
-
----
-
-## 🏗️ Estrutura do Projeto
-
+## Estrutura do projeto (resumida)
 ```
 lib/
-├── config/         # Configurações do app (rotas, temas)
-├── mappers/        # Conversores (DTO -> Entity)
-├── models/         # Modelos de dados (Entity e DTO)
-├── providers/      # Providers Riverpod
-├── repositories/   # Lógica de busca de dados (Supabase)
+├─ config/          # rotas, tema
+├─ providers/       # providers do Riverpod
+├─ services/        # serviços como PrefsService
+├─ repositories/    # lógica de acesso a dados (Supabase)
+├─ screens/         # telas (onboarding, policy, home, profile, achievements)
+├─ widgets/         # componentes reutilizáveis
+└─ main.dart        # entrypoint (inicializa Supabase, carrega .env)
+```
+
+## Notas de desenvolvimento e troubleshooting
+- Se você receber erros de URL com `%3C` / `%3E`, verifique o `.env` e remova `<`/`>`; a sanitização já lida com isso, mas é melhor manter o arquivo correto.
+- Se o app Web travar ao salvar consentimento, atualize para a versão mais recente do repositório — o `policy_screen` já tem tratamento de erro e loading.
+- Para builds Windows, instale o Visual Studio com o workload "Desktop development with C++".
+
+## Contribuições
+- Abra issues para bugs/sugestões.
+- Para PRs: mantenha a mensagem de commit em português e descreva claramente o que a mudança faz.
+
+---
+
+Desenvolvido com 💚 pela equipe SkillSeeds
 ├── screens/        # Telas do aplicativo
 ├── services/       # Serviços (PrefsService)
 ├── widgets/        # Widgets reutilizáveis
