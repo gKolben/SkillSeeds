@@ -1,4 +1,5 @@
 // Comentário: Importa os pacotes principais do Flutter e Riverpod
+// ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Comentário: Importa nossas classes de Tema, Modelos, Providers e Widgets
@@ -8,6 +9,7 @@ import 'package:skillseeds/providers/providers.dart';
 import 'package:skillseeds/widgets/privacy_dialog.dart';
 // Comentário: Importa as rotas para podermos navegar
 import 'package:skillseeds/config/app_routes.dart';
+import 'package:skillseeds/features/models/presentation/courses_page.dart';
 
 // Comentário: A HomeScreen é um ConsumerWidget para poder "escutar" os providers
 class HomeScreen extends ConsumerWidget {
@@ -110,9 +112,16 @@ class HomeScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Seção de Cursos (horizontal) adicionada acima das trilhas
+            Text('Cursos recomendados:', style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 240,
+              child: const CoursesPage(),
+            ),
+            const SizedBox(height: 16),
             Text('Escolha sua trilha de aprendizado:',
                 style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 16),
             Expanded(
               // Comentário: Usamos o 'tracksProvider' para buscar os dados do Supabase.
               // O .when() trata os 3 estados: loading, error, e data.

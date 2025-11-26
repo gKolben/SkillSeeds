@@ -34,4 +34,5 @@ flutter:
   assets:
     - assets/images/app_icon.png
     - assets/policies/
+    - assets/data/
     - .env # <-- ADICIONADO: Registra o .env como um asset
