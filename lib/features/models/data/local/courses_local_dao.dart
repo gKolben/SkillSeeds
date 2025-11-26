@@ -108,10 +108,40 @@ class CoursesLocalDaoJson {
     await _saveCache(_cache!);
   }
 
+  /// Insere ou atualiza um item individual no cache/local storage.
+  Future<void> upsert(CourseDto item) async {
+    final list = await _loadFromCacheOrAsset();
+    final idx = list.indexWhere((e) => e.id == item.id);
+    if (idx >= 0) {
+      list[idx] = item;
+    } else {
+      list.add(item);
+    }
+    _cache = List<CourseDto>.from(list);
+    await _saveCache(_cache!);
+  }
+
   /// Limpa o cache local
   Future<void> clear() async {
     _cache = null;
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_cacheKey);
+  }
+
+  /// Remove um curso pelo `id` do cache/local storage.
+  ///
+  /// Se o item existir, é removido e o cache é salvo. Não lança se o item
+  /// não for encontrado — simplesmente persiste o estado atual.
+  Future<void> remove(String id) async {
+    final list = await _loadFromCacheOrAsset();
+    final idx = list.indexWhere((e) => e.id == id);
+    if (idx >= 0) {
+      list.removeAt(idx);
+      _cache = List<CourseDto>.from(list);
+      await _saveCache(_cache!);
+    } else {
+      // garante que o cache esteja definido mesmo se o item não existir
+      _cache = List<CourseDto>.from(list);
+    }
   }
 }
