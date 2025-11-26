@@ -1,8 +1,10 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import '../data/local/courses_local_dao.dart';
 import '../data/dtos/course_dto.dart';
+import 'dialogs/provider_actions_dialog.dart';
+import 'dialogs/course_form_dialog.dart';
 
 class CoursesPage extends StatefulWidget {
   const CoursesPage({super.key});
@@ -100,13 +102,13 @@ class _CoursesPageState extends State<CoursesPage> {
         }
 
         return SizedBox(
-          height: 220,
-          child: ListView.builder(
+          height: 260,
+            child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: courses.length,
             itemBuilder: (context, index) {
               final c = courses[index];
-              return Container(
+                return Container(
                 width: 300,
                 margin: const EdgeInsets.only(right: 12),
                 child: Card(
@@ -116,48 +118,99 @@ class _CoursesPageState extends State<CoursesPage> {
                     onTap: () {
                       // ação futura: abrir detalhes
                     },
+                    onLongPress: () async {
+                      await showProviderActionsDialog(
+                        context,
+                        item: c,
+                        onEdit: (ctx, item) async {
+                          // placeholder: delegar edição a outro prompt/handler
+                          await showDialog<void>(
+                            context: ctx,
+                            barrierDismissible: false,
+                            builder: (ctx2) => AlertDialog(
+                              title: const Text('Editar (placeholder)'),
+                              content: Text('Abrir formulário de edição para: ${item.name}'),
+                              actions: [
+                                TextButton(onPressed: () => Navigator.of(ctx2).pop(), child: const Text('Fechar')),
+                              ],
+                            ),
+                          );
+                        },
+                        onRemove: (item) async {
+                          // placeholder: delegar remoção a handler externo
+                        },
+                      );
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // imagem
-                          if (c.imageUrl != null)
-                            SizedBox(
-                              height: 90,
-                              width: double.infinity,
-                              child: Image.network(
-                                c.imageUrl!,
-                                fit: BoxFit.cover,
-                                loadingBuilder: (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return const Center(child: CircularProgressIndicator());
-                                },
-                                errorBuilder: (context, error, stackTrace) => const Center(
-                                  child: Icon(Icons.broken_image),
-                                ),
-                              ),
-                            )
-                          else
-                            SizedBox(
-                              height: 90,
-                              child: Center(child: Icon(Icons.school, size: 48, color: Theme.of(context).primaryColor)),
-                            ),
-                          const SizedBox(height: 8),
-                          Text(
-                            c.name,
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                          // imagem (usar expressão ternária para evitar problemas de sintaxe em collection-if/else)
+                          SizedBox(
+                            height: 64,
+                            width: double.infinity,
+                            child: c.imageUrl != null
+                                ? Image.network(
+                                    c.imageUrl!,
+                                    fit: BoxFit.cover,
+                                    loadingBuilder: (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return const Center(child: CircularProgressIndicator());
+                                    },
+                                    errorBuilder: (context, error, stackTrace) => const Center(
+                                      child: Icon(Icons.broken_image),
+                                    ),
+                                  )
+                                : Center(child: Icon(Icons.school, size: 48, color: Theme.of(context).primaryColor)),
                           ),
                           const SizedBox(height: 6),
-                          Text(
-                            c.descricao ?? '-',
-                            style: Theme.of(context).textTheme.bodySmall,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                          Flexible(
+                            fit: FlexFit.loose,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  c.name,
+                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  c.descricao ?? '-',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
                           ),
-                          const Spacer(),
+                          // ícone de edição (quando pertinente)
+                          IconButton(
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            tooltip: 'Editar curso',
+                            icon: const Icon(Icons.edit, size: 16),
+                            onPressed: () async {
+                              await showCourseFormDialog(
+                                context,
+                                initial: c,
+                                onSave: (updated) async {
+                                  try {
+                                    await _dao.upsert(updated);
+                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Curso atualizado com sucesso.')));
+                                    setState(() {
+                                      _futureCourses = _loadCourses();
+                                    });
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao atualizar: $e')));
+                                  }
+                                },
+                              );
+                            },
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -177,7 +230,6 @@ class _CoursesPageState extends State<CoursesPage> {
                               ),
                               PopupMenuButton<String>(
                                 onSelected: (value) async {
-                                  // ações futuras (editar, compartilhar)
                                   if (value == 'info') {
                                     await showDialog(
                                       context: context,
@@ -204,9 +256,32 @@ class _CoursesPageState extends State<CoursesPage> {
                                       ),
                                     );
                                   }
+                                  if (value == 'actions') {
+                                    await showProviderActionsDialog(
+                                      context,
+                                      item: c,
+                                      onEdit: (ctx, item) async {
+                                        await showDialog<void>(
+                                          context: ctx,
+                                          barrierDismissible: false,
+                                          builder: (ctx2) => AlertDialog(
+                                            title: const Text('Editar (placeholder)'),
+                                            content: Text('Abrir formulário de edição para: ${item.name}'),
+                                            actions: [
+                                              TextButton(onPressed: () => Navigator.of(ctx2).pop(), child: const Text('Fechar')),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                      onRemove: (item) async {
+                                        // Delegar remoção ao caller/DAO; implementado externamente.
+                                      },
+                                    );
+                                  }
                                 },
-                                itemBuilder: (context) => [
-                                  const PopupMenuItem(value: 'info', child: Text('Ver detalhes')),
+                                itemBuilder: (context) => const [
+                                  PopupMenuItem(value: 'info', child: Text('Ver detalhes')),
+                                  PopupMenuItem(value: 'actions', child: Text('Ações')),
                                 ],
                               )
                             ],
