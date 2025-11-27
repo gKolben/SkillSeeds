@@ -7,22 +7,22 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 // Comentário: Importa as configurações de rotas e tema do nosso app.
-import 'package:skillseeds/config/app_routes.dart';
-import 'package:skillseeds/config/app_theme.dart';
+import 'package:skillseeds/core/config/app_routes.dart';
+import 'package:skillseeds/core/config/app_theme.dart';
 
 // Comentário: Importa todas as telas (screens) que o app vai usar.
-import 'package:skillseeds/screens/home_screen.dart';
-import 'package:skillseeds/screens/onboarding_screen.dart';
-import 'package:skillseeds/screens/policy_screen.dart';
-import 'package:skillseeds/screens/profile_screen.dart';
-import 'package:skillseeds/screens/splash_screen.dart';
+import 'package:skillseeds/features/home/presentation/home_screen.dart';
+import 'package:skillseeds/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:skillseeds/features/policy/presentation/policy_screen.dart';
+import 'package:skillseeds/features/profile/presentation/profile_screen.dart';
+import 'package:skillseeds/features/splash/presentation/splash_screen.dart';
 
 // --- FEATURE 1: TELA DE LIÇÕES ---
-import 'package:skillseeds/screens/lesson_list_screen.dart';
+import 'package:skillseeds/features/lessons/presentation/lesson_list_screen.dart';
 
 // --- FEATURE 2: TELA DE CONQUISTAS ---
 // Comentário: Importa a nova tela de conquistas que vamos criar.
-import 'package:skillseeds/screens/achievement_list_screen.dart';
+import 'package:skillseeds/features/achievements/presentation/achievement_list_screen.dart';
 
 // Comentário: A função main() é o ponto de entrada de todo aplicativo Dart.
 // Comentário: Ela é 'async' para podermos esperar serviços (como Supabase) inicializarem.

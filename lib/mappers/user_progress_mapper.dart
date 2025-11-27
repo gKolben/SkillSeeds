@@ -1,5 +1,5 @@
-import '../models/user_progress.dart';
-import '../models/user_progress_dto.dart';
+import 'package:skillseeds/core/models/user_progress.dart';
+import 'package:skillseeds/core/models/user_progress_dto.dart';
 
 // O Mapper (Tradutor) para UserProgress
 class UserProgressMapper {

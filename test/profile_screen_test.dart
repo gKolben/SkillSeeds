@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:skillseeds/providers/providers.dart';
-import 'package:skillseeds/screens/profile_screen.dart';
-import 'package:skillseeds/services/prefs_services.dart';
+import 'package:skillseeds/core/providers/providers.dart';
+import 'package:skillseeds/features/profile/presentation/profile_screen.dart';
+import 'package:skillseeds/core/services/prefs_services.dart';
 
 class MockPrefsService extends Mock implements PrefsService {}
 

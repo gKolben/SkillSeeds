@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:skillseeds/services/prefs_keys.dart';
-import 'package:skillseeds/services/prefs_services.dart';
+import 'package:skillseeds/core/services/prefs_keys.dart';
+import 'package:skillseeds/core/services/prefs_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MockSharedPreferences extends Mock implements SharedPreferences {}

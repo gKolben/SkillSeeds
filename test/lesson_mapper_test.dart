@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:skillseeds/mappers/lesson_mapper.dart';
-import 'package:skillseeds/models/lesson.dart';
-import 'package:skillseeds/models/lesson_dto.dart';
+import 'package:skillseeds/core/models/lesson.dart';
+import 'package:skillseeds/core/models/lesson_dto.dart';
 
 void main() {
   group('LessonMapper', () {

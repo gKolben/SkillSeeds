@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:skillseeds/mappers/achievement_mapper.dart';
-import 'package:skillseeds/models/achievement.dart';
-import 'package:skillseeds/models/achievement_dto.dart';
+import 'package:skillseeds/core/models/achievement.dart';
+import 'package:skillseeds/core/models/achievement_dto.dart';
 
 void main() {
   group('AchievementMapper', () {

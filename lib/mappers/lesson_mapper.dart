@@ -1,5 +1,5 @@
-import '../models/lesson.dart';
-import '../models/lesson_dto.dart';
+import 'package:skillseeds/core/models/lesson.dart';
+import 'package:skillseeds/core/models/lesson_dto.dart';
 
 class LessonMapper {
   static Lesson toEntity(LessonDTO dto) {

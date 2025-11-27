@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:skillseeds/mappers/user_progress_mapper.dart';
-import 'package:skillseeds/models/user_progress.dart';
-import 'package:skillseeds/models/user_progress_dto.dart';
+import 'package:skillseeds/core/models/user_progress.dart';
+import 'package:skillseeds/core/models/user_progress_dto.dart';
 
 void main() {
   group('UserProgressMapper', () {

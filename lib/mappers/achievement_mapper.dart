@@ -1,5 +1,5 @@
-import '../models/achievement.dart';
-import '../models/achievement_dto.dart';
+import 'package:skillseeds/core/models/achievement.dart';
+import 'package:skillseeds/core/models/achievement_dto.dart';
 
 // O Mapper (Tradutor) para Achievement
 class AchievementMapper {
