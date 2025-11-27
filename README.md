@@ -84,78 +84,77 @@ SkillSeeds é um aplicativo Flutter focado em micro-aprendizado — curtas ativi
 Crie um arquivo `.env` na raiz (não comitar chaves privadas). Exemplo:
 ```text
 SUPABASE_URL=https://rzkkuvydpwyhhmndyblp.supabase.co
-SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiI... (sua chave anon)
-```
-- Nota: se você copiar a URL/chave do dashboard, não inclua os sinais `<` ou `>` — o app agora os remove automaticamente, mas é melhor manter o arquivo limpo.
+```markdown
+# SkillSeeds 🌱
 
-### Instalar dependências
+**SkillSeeds** é um aplicativo Flutter focado em micro-aprendizado: pequenas atividades diárias para desenvolver hábitos de estudo. O projeto usa Supabase como backend e Riverpod para gerenciamento de estado.
+
+## ✅ Visão geral
+- Onboarding e fluxo de consentimento (LGPD).
+- Perfil do usuário com persistência local (nome/e-mail).
+- Conteúdo dinâmico via Supabase: trilhas, lições e conquistas.
+- Arquitetura: migração para organização feature-first Clean Architecture (`lib/core` + `lib/features`).
+
+## 🧭 Estrutura principal (atual)
+- `lib/core/` — modelos compartilhados, mappers, repositórios core, serviços, providers e widgets globais.
+- `lib/features/<feature>/` — código específico de cada feature (UI, data, domain).
+
+## 🚀 Como rodar (desenvolvimento)
+
+1. Clone o repositório e entre na pasta:
+
+```bash
+git clone https://github.com/gKolben/SkillSeeds.git
+cd SkillSeeds
+```
+
+2. Instale dependências:
+
 ```powershell
 flutter pub get
 ```
 
-### Executar o app (web)
+3. Configure variáveis de ambiente criando um arquivo `.env` (não comitar):
+
+```text
+SUPABASE_URL=https://<seu-projeto>.supabase.co
+SUPABASE_ANON_KEY=<sua_chave_anon>
+```
+
+4. Executar localmente (web):
+
 ```powershell
 flutter run -d web-server --web-port=8080
-# depois abra http://localhost:8080 no navegador (Edge/Chrome)
+# Abra http://localhost:8080
 ```
 
-### Executar o app (mobile)
+5. Executar testes:
+
 ```powershell
-flutter run -d chrome         # web via chrome
-flutter run -d emulator-5554 # Android (exemplo)
+flutter analyze
+flutter test
 ```
 
-### Rodar testes
+## 🛠️ Notas importantes
+- Para builds Windows, instale o Visual Studio com o workload **Desktop development with C++**.
+- Se tiver problemas com a URL contendo `<` ou `>`, verifique o arquivo `.env`; o app sanitiza, mas é melhor manter o arquivo limpo.
+
+## 📝 Migração para Clean Architecture
+Esta branch contém uma migração estrutural para `lib/core` e `lib/features`. Os wrappers top-level que apenas re-exportavam arquivos foram removidos e os imports foram atualizados.
+
+Se você der `git pull` da branch de migração e encontrar erros de import, rode:
+
 ```powershell
-flutter test                 # roda todos os testes
-flutter test test/profile_screen_test.dart  # roda apenas o teste do perfil
+flutter clean
+flutter pub get
 ```
 
-## Como o Supabase deve ser configurado
-- Configure um projeto no Supabase e crie as tabelas necessárias (`tracks`, `lessons`, `achievements`), conforme esperado pelas repositories em `lib/repositories/`.
-- Obtenha `SUPABASE_URL` e `SUPABASE_ANON_KEY` no Dashboard → Project Settings → API.
-
-## Estrutura do projeto (resumida)
-```
-lib/
-├─ config/          # rotas, tema
-├─ providers/       # providers do Riverpod
-├─ services/        # serviços como PrefsService
-├─ repositories/    # lógica de acesso a dados (Supabase)
-├─ screens/         # telas (onboarding, policy, home, profile, achievements)
-├─ widgets/         # componentes reutilizáveis
-└─ main.dart        # entrypoint (inicializa Supabase, carrega .env)
-```
-
-## Notas de desenvolvimento e troubleshooting
-- Se você receber erros de URL com `%3C` / `%3E`, verifique o `.env` e remova `<`/`>`; a sanitização já lida com isso, mas é melhor manter o arquivo correto.
-- Se o app Web travar ao salvar consentimento, atualize para a versão mais recente do repositório — o `policy_screen` já tem tratamento de erro e loading.
-- Para builds Windows, instale o Visual Studio com o workload "Desktop development with C++".
-
-## Contribuições
-- Abra issues para bugs/sugestões.
-- Para PRs: mantenha a mensagem de commit em português e descreva claramente o que a mudança faz.
+## 🔁 Contribuições
+- Abra issues para bugs ou sugestões.
+- Para PRs estruturais, inclua uma descrição clara e passos para testar.
 
 ---
 
 Desenvolvido com 💚 pela equipe SkillSeeds
-├── screens/        # Telas do aplicativo
-├── services/       # Serviços (PrefsService)
-├── widgets/        # Widgets reutilizáveis
-├── main.dart       # Ponto de entrada do aplicativo
-test/               # Testes unitários e de widget
+
 ```
-
----
-
-## 📄 Licença
-
-Este projeto está sob a licença **MIT**.  
-Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
----
-
-## 👥 Contribuições
-
-Contribuições são bem-vindas!  
-Sinta-se à vontade para abrir *issues* ou enviar *pull requests*.
