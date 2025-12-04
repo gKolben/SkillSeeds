@@ -11,4 +11,14 @@ class LessonMapper {
       createdAt: DateTime.parse(dto.createdAt),
     );
   }
+
+  static LessonDTO toDto(Lesson entity) {
+    return LessonDTO(
+      id: entity.id,
+      trackId: entity.trackId,
+      title: entity.title,
+      type: entity.lessonType.toString().split('.').last,
+      createdAt: entity.createdAt.toIso8601String(),
+    );
+  }
 }

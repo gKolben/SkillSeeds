@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import '../data/local/courses_local_dao.dart';
-import '../data/dtos/course_dto.dart';
+import 'package:skillseeds/features/courses/data/local/courses_local_dao.dart';
+import 'package:skillseeds/features/courses/data/dtos/course_dto.dart';
 import 'dialogs/provider_actions_dialog.dart';
 import 'dialogs/course_form_dialog.dart';
 
@@ -42,41 +42,7 @@ class _CoursesPageState extends State<CoursesPage> {
     return '${mins}m';
   }
 
-  // ignore: unused_element
-  String _maskTaxId(String? taxId) {
-    if (taxId == null || taxId.isEmpty) return '';
-    // Ex: "12.345.678/0001-23" -> "12.345.*** / 0001-23"
-    try {
-      final parts = taxId.split('/');
-      if (parts.length == 2) {
-        final left = parts[0];
-        final right = parts[1];
-        final maskedLeft = left.length > 7 ? '${left.substring(0, 7)}***' : left;
-        return '$maskedLeft / $right';
-      }
-    } catch (_) {}
-    return taxId;
-  }
-
-  // ignore: unused_element
-  String _maskPhone(String? phone) {
-    if (phone == null || phone.isEmpty) return '';
-    // simples: oculta parte central
-    final digits = phone.replaceAll(RegExp(r'[^0-9]'), '');
-    if (digits.length >= 8) {
-      final start = digits.substring(0, 4);
-      final end = digits.substring(digits.length - 4);
-      return '$start****$end';
-    }
-    return phone;
-  }
-
-  // ignore: unused_element
-  Future<void> _refresh() async {
-    setState(() {
-      _futureCourses = _loadCourses();
-    });
-  }
+  // helper methods removed: previously masked taxId/phone and unused _refresh.
 
   @override
   Widget build(BuildContext context) {

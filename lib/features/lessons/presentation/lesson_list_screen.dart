@@ -57,7 +57,7 @@ class LessonListScreen extends ConsumerWidget {
 }
 
 // Comentário: Widget auxiliar para exibir um item da lista de lições.
-class LessonListTile extends StatelessWidget {
+class LessonListTile extends ConsumerWidget {
   final Lesson lesson;
   const LessonListTile({super.key, required this.lesson});
 
@@ -74,7 +74,7 @@ class LessonListTile extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       elevation: 1,
@@ -89,11 +89,50 @@ class LessonListTile extends StatelessWidget {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-        onTap: () {
-          // Comentário: Futuramente, isso navegará para a tela de detalhes da lição.
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('${lesson.title} (em breve!)')),
+        onTap: () async {
+          // Abre diálogo de edição do título da lição.
+          final TextEditingController controller = TextEditingController(text: lesson.title);
+          final result = await showDialog<bool>(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Editar Lição'),
+              content: TextField(
+                controller: controller,
+                decoration: const InputDecoration(labelText: 'Título'),
+              ),
+              actions: [
+                TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('Cancelar')),
+                ElevatedButton(onPressed: () => Navigator.of(context).pop(true), child: const Text('Salvar')),
+              ],
+            ),
           );
+
+          if (result == true) {
+            final newTitle = controller.text.trim();
+            if (newTitle.isEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Título vazio')));
+              return;
+            }
+
+            final repo = ref.read(lessonRepositoryProvider);
+            final updated = Lesson(
+              id: lesson.id,
+              trackId: lesson.trackId,
+              title: newTitle,
+              lessonType: lesson.lessonType,
+              createdAt: lesson.createdAt,
+            );
+
+            try {
+              await repo.updateLesson(updated);
+              // Refresh the provider to fetch updated data
+              // Trigger a refresh and ignore the returned AsyncValue.
+              final _ = ref.refresh(lessonsForTrackProvider(lesson.trackId));
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Lição atualizada')));
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao atualizar: $e')));
+            }
+          }
         },
       ),
     );
