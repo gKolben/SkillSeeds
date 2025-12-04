@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skillseeds/core/providers/providers_state.dart';
+import 'package:skillseeds/core/providers/theme_mode_provider.dart';
 import 'package:skillseeds/core/services/prefs_services.dart';
 
 // Comentário: Importa as configurações de rotas e tema do nosso app.
@@ -86,13 +87,15 @@ void main() async {
 }
 
 // Comentário: Esta é a classe raiz do nosso aplicativo (o Widget principal).
-class SkillSeeds extends StatelessWidget {
+class SkillSeeds extends ConsumerWidget {
   // Comentário: Construtor padrão para o widget.
   const SkillSeeds({super.key});
 
   // Comentário: O método build() desenha a UI na tela.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeModeProvider);
+
     // Comentário: MaterialApp é o widget que configura todo o app
     //             (tema, rotas, título, etc.).
     return MaterialApp(
@@ -101,6 +104,8 @@ class SkillSeeds extends StatelessWidget {
 
       // Comentário: Define o tema (cores, fontes) que criamos em app_theme.dart.
       theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeMode,
 
       // Comentário: Remove a faixa "DEBUG" do canto da tela.
       debugShowCheckedModeBanner: false,
