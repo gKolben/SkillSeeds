@@ -1,4 +1,4 @@
-import '../../../../core/models/achievement.dart';
+import 'package:skillseeds/core/models/achievement.dart';
 
 /// Interface de repositório para a entidade Achievement.
 ///

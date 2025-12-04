@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/foundation.dart';
-import 'package:skillseeds/features/providers/data/dtos/provider_dto.dart';
+import 'package:skillseeds/features/providers/data/index.dart';
 
 class SupabaseProvidersRemoteDatasource {
   final SupabaseClient _client;

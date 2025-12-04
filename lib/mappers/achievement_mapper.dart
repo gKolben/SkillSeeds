@@ -1,4 +1,4 @@
-import 'package:skillseeds/core/models/achievement.dart';
+import 'package:skillseeds/features/achievements/domain/index.dart';
 import 'package:skillseeds/core/models/achievement_dto.dart';
 
 // O Mapper (Tradutor) para Achievement

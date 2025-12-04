@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:shared_preferences/shared_preferences.dart';
-import '../dtos/course_dto.dart';
+import 'package:skillseeds/features/courses/data/dtos/course_dto.dart';
 
 class CoursesLocalDaoJson {
   static const _cacheKey = 'courses_cache_v1';

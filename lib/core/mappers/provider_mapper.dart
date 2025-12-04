@@ -1,5 +1,5 @@
 import 'package:skillseeds/core/models/provider_model.dart';
-import 'package:skillseeds/features/providers/data/dtos/provider_dto.dart';
+import 'package:skillseeds/features/providers/data/index.dart';
 
 class ProviderMapper {
   static Provider toEntity(ProviderDto dto) {
