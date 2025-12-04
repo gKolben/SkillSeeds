@@ -1,5 +1,6 @@
 // Comentário: Importa a biblioteca de persistência local.
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
 // Comentário: Importa o nosso arquivo de chaves centralizadas.
 import 'package:skillseeds/core/services/prefs_keys.dart';
 
@@ -58,5 +59,23 @@ class PrefsService {
 
   Future<void> setMarketingConsent(bool value) async {
     await _prefs.setBool(PrefsKeys.marketingConsent, value);
+  }
+
+  // Theme mode helpers
+  ThemeMode getThemeMode() {
+    final s = _prefs.getString(PrefsKeys.themeMode) ?? 'light';
+    switch (s) {
+      case 'light':
+        return ThemeMode.light;
+      case 'dark':
+        return ThemeMode.dark;
+      default:
+        return ThemeMode.light;
+    }
+  }
+
+  Future<void> setThemeMode(ThemeMode mode) async {
+    final s = mode == ThemeMode.light ? 'light' : mode == ThemeMode.dark ? 'dark' : 'system';
+    await _prefs.setString(PrefsKeys.themeMode, s);
   }
 }

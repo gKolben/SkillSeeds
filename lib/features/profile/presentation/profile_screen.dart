@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skillseeds/core/providers/providers.dart';
+import 'package:skillseeds/core/providers/theme_mode_provider.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -108,6 +109,39 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               'Aviso de Privacidade: Seu nome e e-mail são usados apenas para personalizar sua experiência no app e não são compartilhados.',
               style: TextStyle(fontSize: 12, color: Colors.grey),
             ),
+            const SizedBox(height: 16),
+            // Theme mode selector
+            Consumer(builder: (context, ref, _) {
+              final mode = ref.watch(themeModeProvider);
+              String label;
+              switch (mode) {
+                case ThemeMode.light:
+                  label = 'Claro';
+                  break;
+                case ThemeMode.dark:
+                  label = 'Escuro';
+                  break;
+                default:
+                  label = 'Seguir sistema';
+              }
+              return ListTile(
+                title: const Text('Tema da aplicação'),
+                subtitle: Text(label),
+                trailing: DropdownButton<ThemeMode>(
+                  value: mode,
+                  items: const [
+                    DropdownMenuItem(value: ThemeMode.system, child: Text('Seguir sistema')),
+                    DropdownMenuItem(value: ThemeMode.light, child: Text('Claro')),
+                    DropdownMenuItem(value: ThemeMode.dark, child: Text('Escuro')),
+                  ],
+                  onChanged: (v) {
+                    if (v != null) {
+                      ref.read(themeModeProvider.notifier).setThemeMode(v);
+                    }
+                  },
+                ),
+              );
+            }),
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: _onSave,

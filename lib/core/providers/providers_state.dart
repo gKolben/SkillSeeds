@@ -5,11 +5,11 @@ import 'package:flutter/foundation.dart';
 
 // Importações dos nossos modelos, repositórios e serviços (agora em core)
 import 'package:skillseeds/core/models/track.dart';
-import 'package:skillseeds/core/models/lesson.dart';
+import 'package:skillseeds/features/lessons/domain/models/lesson.dart';
 import 'package:skillseeds/core/models/achievement.dart';
 import 'package:skillseeds/core/models/provider_model.dart' as domain; // Prefixo para evitar conflitos
 import 'package:skillseeds/core/repositories/track_repository.dart';
-import 'package:skillseeds/core/repositories/lesson_repository.dart';
+import 'package:skillseeds/features/lessons/data/lesson_repository.dart';
 import 'package:skillseeds/core/repositories/achievement_repository.dart';
 import 'package:skillseeds/core/repositories/providers_repository.dart';
 import 'package:skillseeds/core/services/prefs_services.dart';

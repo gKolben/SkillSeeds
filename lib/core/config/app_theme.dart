@@ -42,4 +42,61 @@ class AppTheme {
       ),
     ),
   );
+
+  static final ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    primaryColor: primaryColor,
+    scaffoldBackgroundColor: const Color(0xFF0B1221),
+    colorScheme: const ColorScheme.dark(
+      primary: primaryColor,
+      secondary: secondaryColor,
+      surface: Color(0xFF0B1221),
+      onPrimary: Colors.white,
+      onSecondary: Colors.white,
+      onSurface: Colors.white,
+    ),
+    // Ensure readable near-white text across the app for accessibility
+    textTheme: GoogleFonts.interTextTheme(
+      ThemeData.dark().textTheme,
+    ).apply(bodyColor: Colors.white70, displayColor: Colors.white70),
+    iconTheme: const IconThemeData(color: Colors.white70),
+    appBarTheme: const AppBarTheme(
+      elevation: 0,
+      backgroundColor: Color(0xFF0B1221),
+      iconTheme: IconThemeData(color: Colors.white),
+        titleTextStyle: TextStyle(
+          color: Color.fromRGBO(255, 255, 255, 0.92), fontSize: 20, fontWeight: FontWeight.bold),
+    ),
+    cardColor: const Color(0xFF111827),
+    listTileTheme: const ListTileThemeData(
+      iconColor: Colors.white70,
+      textColor: Color.fromRGBO(255, 255, 255, 0.92),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: const Color(0xFF0F1724),
+      hintStyle: const TextStyle(color: Color.fromRGBO(255, 255, 255, 0.72)),
+      labelStyle: const TextStyle(color: Color.fromRGBO(255, 255, 255, 0.92)),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+    ),
+    dividerColor: Colors.white12,
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(backgroundColor: primaryColor),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: primaryColor,
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      ),
+    ),
+    switchTheme: SwitchThemeData(
+      thumbColor: WidgetStateProperty.all(primaryColor),
+      trackColor: WidgetStateProperty.resolveWith((states) => const Color.fromRGBO(124, 58, 237, 0.4)),
+    ),
+    checkboxTheme: CheckboxThemeData(fillColor: WidgetStateProperty.all(primaryColor)),
+    radioTheme: RadioThemeData(fillColor: WidgetStateProperty.all(primaryColor)),
+  );
 }

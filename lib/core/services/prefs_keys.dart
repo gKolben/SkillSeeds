@@ -17,4 +17,6 @@ class PrefsKeys {
   static const String marketingConsent = 'marketing_consent';
   // Last sync timestamp for providers (ISO8601 string)
   static const String providersLastSync = 'providers_last_sync';
+  // Theme mode preference: 'system' | 'light' | 'dark'
+  static const String themeMode = 'theme_mode';
 }

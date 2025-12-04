@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skillseeds/core/config/app_theme.dart';
 import 'package:skillseeds/core/models/track.dart';
 import 'package:skillseeds/core/providers/providers.dart';
+import 'package:skillseeds/core/providers/theme_mode_provider.dart';
 import 'package:skillseeds/core/widgets/privacy_dialog.dart';
 // Comentário: Importa as rotas para podermos navegar
 import 'package:skillseeds/core/config/app_routes.dart';
@@ -46,7 +47,7 @@ class HomeScreen extends ConsumerWidget {
                 userEmail.isEmpty ? 'Complete seu perfil' : userEmail,
               ),
               currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.white,
+                backgroundColor: Theme.of(context).colorScheme.surface,
                 // Reutilizamos o ícone do app
                 child: Image.asset(
                   'assets/images/app_icon.png',
@@ -87,6 +88,21 @@ class HomeScreen extends ConsumerWidget {
             const Divider(), // Uma linha visual para separar
 
             // Comentário: Item de navegação para Privacidade (agora no final).
+            // Theme toggle
+            Consumer(builder: (context, ref, _) {
+              final mode = ref.watch(themeModeProvider);
+              final isDark = mode == ThemeMode.dark;
+              final actionIcon = isDark ? Icons.lightbulb_outline : Icons.nightlight_round;
+              return SwitchListTile.adaptive(
+                value: isDark,
+                secondary: Icon(actionIcon),
+                title: const Text('Modo Escuro'),
+                onChanged: (v) {
+                  ref.read(themeModeProvider.notifier).setThemeMode(v ? ThemeMode.dark : ThemeMode.light);
+                },
+              );
+            }),
+
             ListTile(
               leading: const Icon(Icons.shield_outlined),
               title: const Text('Privacidade & Consentimentos'),
@@ -117,7 +133,7 @@ class HomeScreen extends ConsumerWidget {
             const SizedBox(height: 12),
             SizedBox(
               height: 240,
-              child: const CoursesPage(),
+              child: CoursesPage(),
             ),
             const SizedBox(height: 16),
             Text('Escolha sua trilha de aprendizado:',

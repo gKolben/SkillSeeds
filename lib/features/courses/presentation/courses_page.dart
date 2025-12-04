@@ -222,14 +222,19 @@ class _CoursesPageState extends State<CoursesPage> {
                                 children: [
                                   Text(
                                     c.name,
-                                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context).textTheme.titleMedium?.color ?? Color.fromRGBO(255, 255, 255, 0.92),
+                                        ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
                                     c.descricao ?? '-',
-                                    style: Theme.of(context).textTheme.bodySmall,
+                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                          color: Theme.of(context).textTheme.bodySmall?.color ?? Color.fromRGBO(255, 255, 255, 0.92),
+                                        ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
