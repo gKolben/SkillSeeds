@@ -15,4 +15,6 @@ class PrefsKeys {
 
   // Comentário: Chave do Consentimento de Marketing
   static const String marketingConsent = 'marketing_consent';
+  // Last sync timestamp for providers (ISO8601 string)
+  static const String providersLastSync = 'providers_last_sync';
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../data/dtos/course_dto.dart';
+import 'package:skillseeds/features/courses/data/dtos/course_dto.dart';
 
 typedef CourseSaveHandler = Future<void> Function(CourseDto updated);
 

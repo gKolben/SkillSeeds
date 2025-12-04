@@ -5,6 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Comentário: Importa os pacotes para carregar o .env e conectar ao Supabase.
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:skillseeds/core/providers/providers_state.dart';
+import 'package:skillseeds/core/services/prefs_services.dart';
 
 // Comentário: Importa as configurações de rotas e tema do nosso app.
 import 'package:skillseeds/core/config/app_routes.dart';
@@ -65,13 +68,19 @@ void main() async {
     anonKey: supabaseAnonKey,
   );
 
-  // Comentário: Roda o nosso aplicativo.
-  // Comentário: O ProviderScope é o widget do Riverpod que "disponibiliza"
-  //             nossos providers (estados) para todo o app.
+  // Inicializa o SharedPreferences antes de criar o ProviderScope para
+  // garantir que providers sincronos que dependem dele (ex: PrefsService)
+  // tenham acesso imediato aos valores persistidos.
+  final sharedPrefs = await SharedPreferences.getInstance();
+
+  // Roda o nosso aplicativo, sobrescrevendo os providers que dependem
+  // de SharedPreferences para já estarem prontos no momento da criação.
   runApp(
-    const ProviderScope(
-      // Comentário: O widget raiz do nosso app, como renomeamos.
-      child: SkillSeeds(),
+    ProviderScope(
+      overrides: [
+        prefsServiceProvider.overrideWithValue(PrefsService(sharedPrefs)),
+      ],
+      child: const SkillSeeds(),
     ),
   );
 }

@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import '../../data/dtos/course_dto.dart';
+import 'package:skillseeds/features/courses/data/dtos/course_dto.dart';
 import 'package:skillseeds/core/widgets/item_actions_dialog.dart';
 
 typedef ProviderEditHandler = Future<void> Function(BuildContext context, CourseDto item);

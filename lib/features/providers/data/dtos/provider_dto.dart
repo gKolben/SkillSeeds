@@ -5,12 +5,14 @@ class ProviderDto {
   final String name;
   final String? imageUrl;
   final num? distanceKm;
+  final DateTime? updatedAt;
 
   ProviderDto({
     required this.id,
     required this.name,
     this.imageUrl,
     this.distanceKm,
+    this.updatedAt,
   });
 
   factory ProviderDto.fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,7 @@ class ProviderDto {
       name: json['name'] as String,
       imageUrl: json['image_url'] as String?,
       distanceKm: json['distance_km'] as num?,
+      updatedAt: json['updated_at'] != null ? DateTime.tryParse(json['updated_at'] as String) : null,
     );
   }
 
@@ -28,6 +31,7 @@ class ProviderDto {
       'name': name,
       'image_url': imageUrl,
       'distance_km': distanceKm,
+      if (updatedAt != null) 'updated_at': updatedAt!.toIso8601String(),
     };
   }
 

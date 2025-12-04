@@ -88,8 +88,10 @@ class ProvidersNotifier extends StateNotifier<List<domain.Provider>> {
 
   Future<void> loadProviders() async {
     try {
+      if (kDebugMode) print('ProvidersNotifier.loadProviders: requesting providers from repository');
       final providers = await _repository.fetchProviders();
       state = providers;
+      if (kDebugMode) print('ProvidersNotifier.loadProviders: state updated with ${state.length} providers');
     } catch (e) {
       // Log de erro para facilitar o diagnóstico
       if (kDebugMode) {
@@ -100,10 +102,11 @@ class ProvidersNotifier extends StateNotifier<List<domain.Provider>> {
 
   Future<void> syncProviders() async {
     try {
+      if (kDebugMode) print('ProvidersNotifier.syncProviders: starting sync');
       final syncedProviders = await _repository.syncProviders();
       state = syncedProviders;
       if (kDebugMode) {
-        print('Sincronização concluída com sucesso.');
+        print('ProvidersNotifier.syncProviders: sync finished, ${syncedProviders.length} providers applied');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -116,16 +119,19 @@ class ProvidersNotifier extends StateNotifier<List<domain.Provider>> {
     await _repository.createProvider(provider);
     // atualizar estado local
     state = [...state, provider];
+    if (kDebugMode) print('ProvidersNotifier.createProvider: added id=${provider.id} to state');
   }
 
   Future<void> updateProvider(domain.Provider provider) async {
     await _repository.updateProvider(provider);
     state = state.map((p) => p.id == provider.id ? provider : p).toList();
+    if (kDebugMode) print('ProvidersNotifier.updateProvider: updated id=${provider.id} in state');
   }
 
   Future<void> removeProvider(String id) async {
     await _repository.removeProvider(id);
     state = state.where((p) => p.id != id).toList();
+    if (kDebugMode) print('ProvidersNotifier.removeProvider: removed id=$id from state');
   }
 }
 
