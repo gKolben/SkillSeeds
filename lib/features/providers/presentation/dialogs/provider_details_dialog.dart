@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:skillseeds/core/models/provider_model.dart' as domain;
+import 'package:skillseeds/features/providers/domain/index.dart' as domain;
 
 Future<void> showProviderDetailsDialog(BuildContext context, domain.Provider item) {
   return showDialog<void>(

@@ -1,3 +1,4 @@
+// backup of duplicate CoursesPage from lib/features/models
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
@@ -25,11 +26,9 @@ class _CoursesPageState extends State<CoursesPage> {
 
   Future<List<CourseDto>> _loadCourses() async {
     try {
-      // Carregamento inicial: primeira página com valores padrão
       final list = await _dao.listAll(page: 1, pageSize: 20);
       return list;
     } catch (e) {
-      // rethrow para ser tratado no widget build
       rethrow;
     }
   }
@@ -41,8 +40,6 @@ class _CoursesPageState extends State<CoursesPage> {
     if (hours > 0) return '${hours}h ${mins}m';
     return '${mins}m';
   }
-
-  // helper methods removed: previously masked taxId/phone and unused _refresh.
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +66,7 @@ class _CoursesPageState extends State<CoursesPage> {
 
         return SizedBox(
           height: 260,
-            child: ListView.builder(
+          child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: courses.length,
             itemBuilder: (context, index) {

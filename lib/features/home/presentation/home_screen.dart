@@ -10,7 +10,7 @@ import 'package:skillseeds/core/providers/theme_mode_provider.dart';
 import 'package:skillseeds/core/widgets/privacy_dialog.dart';
 // Comentário: Importa as rotas para podermos navegar
 import 'package:skillseeds/core/config/app_routes.dart';
-import 'package:skillseeds/features/courses/presentation/courses_page.dart';
+import 'package:skillseeds/features/courses/presentation/index.dart';
 
 // Comentário: A HomeScreen é um ConsumerWidget para poder "escutar" os providers
 class HomeScreen extends ConsumerWidget {

@@ -1,3 +1,4 @@
+// backup of duplicate CoursesLocalDaoJson from lib/features/models
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,7 +40,6 @@ class CoursesLocalDaoJson {
     return _cache!;
   }
 
-  /// Lista cursos aplicando filtros simples (q) e paginação.
   Future<List<CourseDto>> listAll({
     Map<String, dynamic>? filters,
     int page = 1,
@@ -51,7 +51,6 @@ class CoursesLocalDaoJson {
     final all = await _loadFromCacheOrAsset();
     var filtered = all;
 
-    // filtro 'q' simples buscando por nome e descricao
     final q = filters != null && filters['q'] != null ? (filters['q'] as String).toLowerCase() : null;
     if (q != null && q.isNotEmpty) {
       filtered = filtered.where((c) {
@@ -61,13 +60,11 @@ class CoursesLocalDaoJson {
       }).toList();
     }
 
-    // filtro por status
     if (filters != null && filters['status'] != null) {
       final s = (filters['status'] as String).toLowerCase();
       filtered = filtered.where((c) => (c.status ?? '').toLowerCase() == s).toList();
     }
 
-    // sort
     filtered.sort((a, b) {
       final aVal = _getSortValue(a, sortBy);
       final bVal = _getSortValue(b, sortBy);
@@ -75,14 +72,11 @@ class CoursesLocalDaoJson {
       if (aVal == null) return sortDir == 'asc' ? -1 : 1;
       if (bVal == null) return sortDir == 'asc' ? 1 : -1;
       if (aVal is num && bVal is num) {
-        return sortDir == 'asc'
-            ? (aVal).compareTo(bVal)
-            : (bVal).compareTo(aVal);
+        return sortDir == 'asc' ? (aVal).compareTo(bVal) : (bVal).compareTo(aVal);
       }
       return sortDir == 'asc' ? aVal.toString().compareTo(bVal.toString()) : bVal.toString().compareTo(aVal.toString());
     });
 
-    // pagination (page, pageSize)
     final start = (page - 1) * pageSize;
     if (start >= filtered.length) return <CourseDto>[];
     final end = (start + pageSize) > filtered.length ? filtered.length : start + pageSize;
@@ -102,13 +96,11 @@ class CoursesLocalDaoJson {
     }
   }
 
-  /// Substitui todo o conjunto local (upsertAll)
   Future<void> upsertAll(List<CourseDto> items) async {
     _cache = List<CourseDto>.from(items);
     await _saveCache(_cache!);
   }
 
-  /// Insere ou atualiza um item individual no cache/local storage.
   Future<void> upsert(CourseDto item) async {
     final list = await _loadFromCacheOrAsset();
     final idx = list.indexWhere((e) => e.id == item.id);
@@ -121,17 +113,12 @@ class CoursesLocalDaoJson {
     await _saveCache(_cache!);
   }
 
-  /// Limpa o cache local
   Future<void> clear() async {
     _cache = null;
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_cacheKey);
   }
 
-  /// Remove um curso pelo `id` do cache/local storage.
-  ///
-  /// Se o item existir, é removido e o cache é salvo. Não lança se o item
-  /// não for encontrado — simplesmente persiste o estado atual.
   Future<void> remove(String id) async {
     final list = await _loadFromCacheOrAsset();
     final idx = list.indexWhere((e) => e.id == id);
@@ -140,7 +127,6 @@ class CoursesLocalDaoJson {
       _cache = List<CourseDto>.from(list);
       await _saveCache(_cache!);
     } else {
-      // garante que o cache esteja definido mesmo se o item não existir
       _cache = List<CourseDto>.from(list);
     }
   }

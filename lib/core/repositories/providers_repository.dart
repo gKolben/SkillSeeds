@@ -1,8 +1,7 @@
 import 'dart:developer' as developer;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:skillseeds/core/models/provider_model.dart' as domain;
-import 'package:skillseeds/features/providers/data/providers_local_dao_shared_prefs.dart';
-import 'package:skillseeds/features/providers/data/supabase_providers_remote_datasource.dart';
+import 'package:skillseeds/features/providers/data/index.dart';
 import 'package:skillseeds/core/mappers/provider_mapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart';

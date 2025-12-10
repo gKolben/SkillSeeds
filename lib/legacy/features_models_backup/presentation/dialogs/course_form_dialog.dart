@@ -3,17 +3,13 @@ import 'package:skillseeds/features/courses/data/dtos/course_dto.dart';
 
 typedef CourseSaveHandler = Future<void> Function(CourseDto updated);
 
-/// Diálogo de formulário para criar/editar um CourseDto.
-/// - Não-dismissable (barrierDismissible: false).
 Future<void> showCourseFormDialog(
   BuildContext context, {
   required CourseDto initial,
   required CourseSaveHandler onSave,
 }) async {
-  // ignore: no_leading_underscores_for_local_identifiers
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
-  // Controllers with initial values
   final nameCtrl = TextEditingController(text: initial.name);
   final descricaoCtrl = TextEditingController(text: initial.descricao ?? '');
   final taxCtrl = TextEditingController(text: initial.taxId ?? '');
@@ -34,33 +30,15 @@ Future<void> showCourseFormDialog(
         title: const Text('Editar curso'),
         content: SingleChildScrollView(
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextFormField(
-                  controller: nameCtrl,
-                  decoration: const InputDecoration(labelText: 'Nome'),
-                  validator: (v) => (v == null || v.isEmpty) ? 'Nome é obrigatório' : null,
-                ),
-                TextFormField(
-                  controller: descricaoCtrl,
-                  decoration: const InputDecoration(labelText: 'Descrição'),
-                  maxLines: 3,
-                ),
-                TextFormField(
-                  controller: durationCtrl,
-                  decoration: const InputDecoration(labelText: 'Duração (minutos)'),
-                  keyboardType: TextInputType.number,
-                ),
-                TextFormField(
-                  controller: taxCtrl,
-                  decoration: const InputDecoration(labelText: 'Tax ID'),
-                ),
-                TextFormField(
-                  controller: imageCtrl,
-                  decoration: const InputDecoration(labelText: 'URL da imagem'),
-                ),
+                TextFormField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Nome'), validator: (v) => (v == null || v.isEmpty) ? 'Nome é obrigatório' : null),
+                TextFormField(controller: descricaoCtrl, decoration: const InputDecoration(labelText: 'Descrição'), maxLines: 3),
+                TextFormField(controller: durationCtrl, decoration: const InputDecoration(labelText: 'Duração (minutos)'), keyboardType: TextInputType.number),
+                TextFormField(controller: taxCtrl, decoration: const InputDecoration(labelText: 'Tax ID')),
+                TextFormField(controller: imageCtrl, decoration: const InputDecoration(labelText: 'URL da imagem')),
                 const SizedBox(height: 8),
                 const Align(alignment: Alignment.centerLeft, child: Text('Contato', style: TextStyle(fontWeight: FontWeight.bold))),
                 TextFormField(controller: emailCtrl, decoration: const InputDecoration(labelText: 'E-mail')),
@@ -79,7 +57,7 @@ Future<void> showCourseFormDialog(
           TextButton(onPressed: () => Navigator.of(ctx).pop(), child: const Text('Cancelar')),
           TextButton(
             onPressed: () async {
-              if (!_formKey.currentState!.validate()) return;
+              if (!formKey.currentState!.validate()) return;
 
               final updated = CourseDto(
                 id: initial.id,
@@ -106,7 +84,6 @@ Future<void> showCourseFormDialog(
               );
 
               Navigator.of(ctx).pop();
-              // capture messenger from parent context to avoid use_build_context_synchronously
               final messenger = ScaffoldMessenger.of(context);
               try {
                 await onSave(updated);

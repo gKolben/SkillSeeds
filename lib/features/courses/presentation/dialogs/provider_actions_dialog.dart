@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:skillseeds/core/config/app_theme.dart';
-import '../../data/dtos/course_dto.dart';
+import 'package:skillseeds/features/courses/data/dtos/course_dto.dart';
 import 'package:skillseeds/core/widgets/item_actions_dialog.dart';
 
 typedef ProviderEditHandler = Future<void> Function(BuildContext context, CourseDto item);

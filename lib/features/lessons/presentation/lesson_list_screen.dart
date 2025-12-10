@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skillseeds/core/models/track.dart';
 import 'package:skillseeds/core/providers/providers.dart';
-import 'package:skillseeds/features/lessons/domain/models/lesson.dart'; // Importa nosso modelo de Lição
+import 'package:skillseeds/features/lessons/domain/index.dart';
 
 // Comentário: Esta tela é um ConsumerWidget, o que nos permite "escutar" os providers.
 class LessonListScreen extends ConsumerWidget {
@@ -107,6 +107,8 @@ class LessonListTile extends ConsumerWidget {
             ),
           );
 
+          if (!context.mounted) return;
+
           if (result == true) {
             final newTitle = controller.text.trim();
             if (newTitle.isEmpty) {
@@ -126,6 +128,7 @@ class LessonListTile extends ConsumerWidget {
 
             try {
               await repo.updateLesson(updated);
+              if (!context.mounted) return;
               // Refresh the provider to fetch updated data
               // Trigger a refresh and ignore the returned AsyncValue.
               final _ = ref.refresh(lessonsForTrackProvider(lesson.trackId));

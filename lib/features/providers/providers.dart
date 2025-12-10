@@ -1,5 +1,5 @@
 // Barrel for providers feature (re-exports existing locations)
-export 'package:skillseeds/core/models/provider_model.dart';
+export 'domain/index.dart';
 export 'data/dtos/provider_dto.dart';
 export 'data/providers_local_dao_shared_prefs.dart';
 export 'data/supabase_providers_remote_datasource.dart';

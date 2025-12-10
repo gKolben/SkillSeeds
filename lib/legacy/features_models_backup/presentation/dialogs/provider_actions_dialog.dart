@@ -1,3 +1,4 @@
+// backup of duplicate provider_actions_dialog
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
@@ -7,11 +8,6 @@ import 'package:skillseeds/core/widgets/item_actions_dialog.dart';
 typedef ProviderEditHandler = Future<void> Function(BuildContext context, CourseDto item);
 typedef ProviderRemoveHandler = Future<void> Function(CourseDto item);
 
-/// Diálogo reutilizável com ações para um item (Editar / Remover / Fechar).
-///
-/// - O diálogo é não-dismissable (barrierDismissible: false).
-/// - `onEdit` pode delegar para `showProviderFormDialog` quando disponível.
-/// - `onRemove` deve executar a remoção (delegado ao caller/DAO).
 Future<void> showProviderActionsDialog(
   BuildContext parentContext, {
   required CourseDto item,
@@ -31,7 +27,7 @@ Future<void> showProviderActionsDialog(
   final actions = <Widget>[
     TextButton(
       onPressed: () async {
-        Navigator.of(parentContext).pop(); // close the caller context if needed
+        Navigator.of(parentContext).pop();
         if (onEdit != null) {
           final messenger = ScaffoldMessenger.of(parentContext);
           try {

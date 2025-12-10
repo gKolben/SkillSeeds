@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Comentário: Importa o provider que busca as conquistas do Supabase.
 import 'package:skillseeds/core/providers/providers.dart';
 // Comentário: Importa o nosso modelo de dados (Entity) de Conquista.
-import 'package:skillseeds/core/models/achievement.dart';
+import 'package:skillseeds/features/achievements/domain/index.dart';
 
 // Comentário: A tela é um ConsumerWidget para podermos usar o 'ref.watch'.
 class AchievementListScreen extends ConsumerWidget {

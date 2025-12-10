@@ -2,8 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:skillseeds/core/config/app_theme.dart';
-import '../data/local/courses_local_dao.dart';
-import '../data/dtos/course_dto.dart';
+import 'package:skillseeds/features/courses/data/index.dart';
 import 'dialogs/provider_actions_dialog.dart';
 import 'dialogs/course_form_dialog.dart';
 

@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:skillseeds/features/providers/data/dtos/provider_dto.dart';
+import 'package:skillseeds/features/providers/data/index.dart';
 import 'package:flutter/foundation.dart';
 
 class ProvidersLocalDaoSharedPrefs {

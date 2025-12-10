@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skillseeds/core/providers/providers.dart';
 import 'package:flutter/foundation.dart';
-import 'package:skillseeds/features/providers/presentation/widgets/provider_list_view.dart';
-import 'dialogs/provider_form_dialog.dart';
+import 'package:skillseeds/features/providers/presentation/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:skillseeds/features/providers/data/providers_local_dao_shared_prefs.dart';
+import 'package:skillseeds/features/providers/data/index.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:skillseeds/core/repositories/providers_repository.dart';
 
