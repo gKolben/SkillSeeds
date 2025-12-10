@@ -36,30 +36,21 @@ class _PolicyScreenState extends ConsumerState<PolicyScreen> {
   Future<void> _showPolicyDialog(String title, String assetPath) async {
     final content = await rootBundle.loadString(assetPath);
     if (!mounted) return;
+    
     await showDialog(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(title),
-        content: Scrollbar(
-          child: SingleChildScrollView(
-            child: MarkdownBody(data: content),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(dialogContext).pop();
-              // Comentário: Atualiza o estado da política lida.
-              if (assetPath.contains('privacy')) {
-                setState(() => _privacyPolicyRead = true);
-              } else {
-                setState(() => _termsOfUseRead = true);
-              }
-              _checkCanProceed();
-            },
-            child: const Text('Marcar como Lido'),
-          ),
-        ],
+      builder: (dialogContext) => _PolicyDialog(
+        title: title,
+        content: content,
+        onRead: () {
+          // Comentário: Atualiza o estado da política lida.
+          if (assetPath.contains('privacy')) {
+            setState(() => _privacyPolicyRead = true);
+          } else {
+            setState(() => _termsOfUseRead = true);
+          }
+          _checkCanProceed();
+        },
       ),
     );
   }
@@ -203,6 +194,130 @@ class _PolicyButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
+    );
+  }
+}
+
+// Comentário: Widget de diálogo com detecção de rolagem até o final
+class _PolicyDialog extends StatefulWidget {
+  final String title;
+  final String content;
+  final VoidCallback onRead;
+
+  const _PolicyDialog({
+    required this.title,
+    required this.content,
+    required this.onRead,
+  });
+
+  @override
+  State<_PolicyDialog> createState() => _PolicyDialogState();
+}
+
+class _PolicyDialogState extends State<_PolicyDialog> {
+  final ScrollController _scrollController = ScrollController();
+  bool _hasScrolledToBottom = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    
+    // Comentário: Verifica se o conteúdo é pequeno o suficiente para não precisar de scroll
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        final maxScroll = _scrollController.position.maxScrollExtent;
+        if (maxScroll == 0) {
+          // Conteúdo cabe na tela sem scroll
+          setState(() => _hasScrolledToBottom = true);
+        }
+      }
+    });
+  }
+
+  void _onScroll() {
+    if (!_hasScrolledToBottom && _scrollController.hasClients) {
+      final maxScroll = _scrollController.position.maxScrollExtent;
+      final currentScroll = _scrollController.offset;
+      
+      // Comentário: Considera "final" quando está a menos de 20 pixels do fim
+      if (currentScroll >= maxScroll - 20) {
+        setState(() => _hasScrolledToBottom = true);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(widget.title),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: Scrollbar(
+                controller: _scrollController,
+                thumbVisibility: true,
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: MarkdownBody(data: widget.content),
+                  ),
+                ),
+              ),
+            ),
+            if (!_hasScrolledToBottom)
+              Container(
+                margin: const EdgeInsets.only(top: 16),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.orange.shade100,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.orange.shade300),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.arrow_downward, color: Colors.orange.shade700, size: 20),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Role até o final para aceitar',
+                        style: TextStyle(
+                          color: Colors.orange.shade900,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancelar'),
+        ),
+        TextButton(
+          onPressed: _hasScrolledToBottom
+              ? () {
+                  widget.onRead();
+                  Navigator.of(context).pop();
+                }
+              : null,
+          child: const Text('Marcar como Lido'),
+        ),
+      ],
     );
   }
 }
