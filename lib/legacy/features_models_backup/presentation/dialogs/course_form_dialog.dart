@@ -8,7 +8,7 @@ Future<void> showCourseFormDialog(
   required CourseDto initial,
   required CourseSaveHandler onSave,
 }) async {
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   final nameCtrl = TextEditingController(text: initial.name);
   final descricaoCtrl = TextEditingController(text: initial.descricao ?? '');
@@ -30,7 +30,7 @@ Future<void> showCourseFormDialog(
         title: const Text('Editar curso'),
         content: SingleChildScrollView(
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -57,7 +57,7 @@ Future<void> showCourseFormDialog(
           TextButton(onPressed: () => Navigator.of(ctx).pop(), child: const Text('Cancelar')),
           TextButton(
             onPressed: () async {
-              if (!_formKey.currentState!.validate()) return;
+              if (!formKey.currentState!.validate()) return;
 
               final updated = CourseDto(
                 id: initial.id,
