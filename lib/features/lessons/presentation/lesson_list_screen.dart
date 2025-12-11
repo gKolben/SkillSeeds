@@ -52,7 +52,131 @@ class LessonListScreen extends ConsumerWidget {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showAddLessonDialog(context, ref, track),
+        tooltip: 'Adicionar Lição',
+        child: const Icon(Icons.add),
+      ),
     );
+  }
+
+  Future<void> _showAddLessonDialog(
+    BuildContext context,
+    WidgetRef ref,
+    Track track,
+  ) async {
+    final titleController = TextEditingController();
+    LessonType selectedType = LessonType.reading;
+    bool isLoading = false;
+
+    await showDialog(
+      context: context,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: const Text('Adicionar Lição'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: titleController,
+                  decoration: const InputDecoration(
+                    labelText: 'Título da Lição',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                DropdownButton<LessonType>(
+                  value: selectedType,
+                  isExpanded: true,
+                  items: LessonType.values
+                      .map((type) => DropdownMenuItem(
+                            value: type,
+                            child: Text(_getLessonTypeName(type)),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() => selectedType = value);
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: isLoading ? null : () => Navigator.of(context).pop(),
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: isLoading
+                  ? null
+                  : () async {
+                      final title = titleController.text.trim();
+                      if (title.isEmpty) {
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Título é obrigatório')),
+                        );
+                        return;
+                      }
+
+                      setState(() => isLoading = true);
+
+                      try {
+                        final repo = ref.read(lessonRepositoryProvider);
+                        final newLesson = Lesson(
+                          id: 0, // Supabase vai gerar automaticamente
+                          trackId: track.id,
+                          title: title,
+                          lessonType: selectedType,
+                          createdAt: DateTime.now(),
+                        );
+
+                        await repo.createLesson(newLesson);
+
+                        if (!context.mounted) return;
+                        Navigator.of(context).pop();
+
+                        // Refresh the provider to fetch updated data
+                        // ignore: unused_result
+                        ref.refresh(lessonsForTrackProvider(track.id));
+
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Lição adicionada com sucesso')),
+                        );
+                      } catch (e) {
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Erro ao adicionar: $e')),
+                        );
+                      }
+                    },
+              child: isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Text('Adicionar'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _getLessonTypeName(LessonType type) {
+    switch (type) {
+      case LessonType.reading:
+        return 'Leitura';
+      case LessonType.video:
+        return 'Vídeo';
+      case LessonType.quiz:
+        return 'Quiz';
+    }
   }
 }
 
