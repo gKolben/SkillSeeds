@@ -105,11 +105,15 @@ class LessonListScreen extends ConsumerWidget {
             ),
           ),
           actions: [
-            TextButton(
+            OutlinedButton(
               onPressed: isLoading ? null : () => Navigator.of(context).pop(),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Theme.of(context).primaryColor,
+                side: BorderSide(color: Theme.of(context).primaryColor),
+              ),
               child: const Text('Cancelar'),
             ),
-            ElevatedButton(
+            OutlinedButton(
               onPressed: isLoading
                   ? null
                   : () async {
@@ -154,6 +158,10 @@ class LessonListScreen extends ConsumerWidget {
                         );
                       }
                     },
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Theme.of(context).primaryColor,
+                side: BorderSide(color: Theme.of(context).primaryColor),
+              ),
               child: isLoading
                   ? const SizedBox(
                       height: 20,
@@ -242,8 +250,22 @@ class LessonListTile extends ConsumerWidget {
           decoration: const InputDecoration(labelText: 'Título'),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('Cancelar')),
-          ElevatedButton(onPressed: () => Navigator.of(context).pop(true), child: const Text('Salvar')),
+          OutlinedButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Theme.of(context).primaryColor,
+              side: BorderSide(color: Theme.of(context).primaryColor),
+            ),
+            child: const Text('Cancelar'),
+          ),
+          OutlinedButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Theme.of(context).primaryColor,
+              side: BorderSide(color: Theme.of(context).primaryColor),
+            ),
+            child: const Text('Salvar'),
+          ),
         ],
       ),
     );
@@ -288,11 +310,21 @@ class LessonListTile extends ConsumerWidget {
         title: const Text('Remover Lição'),
         content: Text('Tem certeza que deseja remover a lição "${lesson.title}"?'),
         actions: [
-          TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('Cancelar')),
-          ElevatedButton(
+          OutlinedButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Theme.of(context).primaryColor,
+              side: BorderSide(color: Theme.of(context).primaryColor),
+            ),
+            child: const Text('Cancelar'),
+          ),
+          OutlinedButton(
             onPressed: () => Navigator.of(context).pop(true),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Remover', style: TextStyle(color: Colors.white)),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Colors.red,
+              side: const BorderSide(color: Colors.red),
+            ),
+            child: const Text('Remover'),
           ),
         ],
       ),
