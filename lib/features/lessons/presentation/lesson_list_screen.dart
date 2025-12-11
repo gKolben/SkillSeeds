@@ -25,32 +25,35 @@ class LessonListScreen extends ConsumerWidget {
         title: Text(track.name),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
-      body: lessonsAsyncValue.when(
-        // Estado 1: Carregando
-        // Comentário: Mostra um indicador de progresso enquanto busca no Supabase.
-        loading: () => const Center(child: CircularProgressIndicator()),
+      body: RefreshIndicator(
+        onRefresh: () => ref.refresh(lessonsForTrackProvider(track.id).future),
+        child: lessonsAsyncValue.when(
+          // Estado 1: Carregando
+          // Comentário: Mostra um indicador de progresso enquanto busca no Supabase.
+          loading: () => const Center(child: CircularProgressIndicator()),
 
-        // Estado 2: Erro
-        // Comentário: Mostra uma mensagem de erro se a busca falhar.
-        error: (err, stack) => Center(child: Text('Erro: $err')),
+          // Estado 2: Erro
+          // Comentário: Mostra uma mensagem de erro se a busca falhar.
+          error: (err, stack) => Center(child: Text('Erro: $err')),
 
-        // Estado 3: Sucesso (Dados recebidos)
-        // Comentário: Recebe a lista de 'lessons' (lições) e constrói a tela.
-        data: (lessons) {
-          if (lessons.isEmpty) {
-            return const Center(
-                child: Text('Nenhuma lição encontrada para esta trilha.'));
-          }
+          // Estado 3: Sucesso (Dados recebidos)
+          // Comentário: Recebe a lista de 'lessons' (lições) e constrói a tela.
+          data: (lessons) {
+            if (lessons.isEmpty) {
+              return const Center(
+                  child: Text('Nenhuma lição encontrada para esta trilha.'));
+            }
 
-          // Comentário: Usa um ListView.builder para construir a lista de lições.
-          return ListView.builder(
-            itemCount: lessons.length,
-            itemBuilder: (context, index) {
-              final lesson = lessons[index];
-              return LessonListTile(lesson: lesson);
-            },
-          );
-        },
+            // Comentário: Usa um ListView.builder para construir a lista de lições.
+            return ListView.builder(
+              itemCount: lessons.length,
+              itemBuilder: (context, index) {
+                final lesson = lessons[index];
+                return LessonListTile(lesson: lesson);
+              },
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddLessonDialog(context, ref, track),
