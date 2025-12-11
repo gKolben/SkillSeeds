@@ -212,59 +212,112 @@ class LessonListTile extends ConsumerWidget {
           lesson.title,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-        onTap: () async {
-          // Abre diálogo de edição do título da lição.
-          final TextEditingController controller = TextEditingController(text: lesson.title);
-          final result = await showDialog<bool>(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Editar Lição'),
-              content: TextField(
-                controller: controller,
-                decoration: const InputDecoration(labelText: 'Título'),
-              ),
-              actions: [
-                TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('Cancelar')),
-                ElevatedButton(onPressed: () => Navigator.of(context).pop(true), child: const Text('Salvar')),
-              ],
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.edit),
+              color: Theme.of(context).primaryColor,
+              onPressed: () => _showEditLessonDialog(context, ref),
             ),
-          );
-
-          if (!context.mounted) return;
-
-          if (result == true) {
-            final newTitle = controller.text.trim();
-            if (newTitle.isEmpty) {
-              if (!context.mounted) return;
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Título vazio')));
-              return;
-            }
-
-            final repo = ref.read(lessonRepositoryProvider);
-            final updated = Lesson(
-              id: lesson.id,
-              trackId: lesson.trackId,
-              title: newTitle,
-              lessonType: lesson.lessonType,
-              createdAt: lesson.createdAt,
-            );
-
-            try {
-              await repo.updateLesson(updated);
-              if (!context.mounted) return;
-              // Refresh the provider to fetch updated data
-              // Trigger a refresh and ignore the returned AsyncValue.
-              final _ = ref.refresh(lessonsForTrackProvider(lesson.trackId));
-              if (!context.mounted) return;
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Lição atualizada')));
-            } catch (e) {
-              if (!context.mounted) return;
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao atualizar: $e')));
-            }
-          }
-        },
+            IconButton(
+              icon: const Icon(Icons.delete),
+              color: Colors.red,
+              onPressed: () => _showDeleteConfirmDialog(context, ref),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  Future<void> _showEditLessonDialog(BuildContext context, WidgetRef ref) async {
+    final TextEditingController controller = TextEditingController(text: lesson.title);
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Editar Lição'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(labelText: 'Título'),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('Cancelar')),
+          ElevatedButton(onPressed: () => Navigator.of(context).pop(true), child: const Text('Salvar')),
+        ],
+      ),
+    );
+
+    if (!context.mounted) return;
+
+    if (result == true) {
+      final newTitle = controller.text.trim();
+      if (newTitle.isEmpty) {
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Título vazio')));
+        return;
+      }
+
+      final repo = ref.read(lessonRepositoryProvider);
+      final updated = Lesson(
+        id: lesson.id,
+        trackId: lesson.trackId,
+        title: newTitle,
+        lessonType: lesson.lessonType,
+        createdAt: lesson.createdAt,
+      );
+
+      try {
+        await repo.updateLesson(updated);
+        if (!context.mounted) return;
+        // ignore: unused_result
+        ref.refresh(lessonsForTrackProvider(lesson.trackId));
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Lição atualizada')));
+      } catch (e) {
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao atualizar: $e')));
+      }
+    }
+  }
+
+  Future<void> _showDeleteConfirmDialog(BuildContext context, WidgetRef ref) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Remover Lição'),
+        content: Text('Tem certeza que deseja remover a lição "${lesson.title}"?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('Cancelar')),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text('Remover', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+
+    if (!context.mounted) return;
+
+    if (result == true) {
+      final repo = ref.read(lessonRepositoryProvider);
+      try {
+        final success = await repo.removeLesson(lesson.id);
+        if (!context.mounted) return;
+
+        if (success) {
+          // ignore: unused_result
+          ref.refresh(lessonsForTrackProvider(lesson.trackId));
+          if (!context.mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Lição removida')));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Erro ao remover lição')));
+        }
+      } catch (e) {
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao remover: $e')));
+      }
+    }
   }
 }
